@@ -1,0 +1,231 @@
+﻿@page "/"
+@layout LayoutPage 
+@inject ITelegramAuth telegramServ
+@inject ILocalStorageService lStorage
+<PageTitle>Home</PageTitle>
+
+
+
+<div class="container" style="color:darkslateblue">
+
+    <div class="flex flex-col h-screen bg-background text-foreground" >
+        <main class="flex-1 flex flex-col items-center justify-center gap-8 px-6 py-12" style="color:white">
+            <div class="flex flex-col items-center gap-2">
+                <h1 class="text-3xl font-bold">Airdrop Claim</h1>
+                <p class="text-muted-foreground">Claim your free tokens every 6 hours</p>
+            </div>
+            <div class="bg-card rounded-lg p-6 w-full max-w-md flex flex-col items-center gap-4">
+                <div class="bg-muted rounded-full w-20 h-20 flex items-center justify-center text-4xl">
+                   @* <img src="/images/dakcoin.jpg" /> *@
+                   
+                    <div class="loader">
+                        
+                        <span>Farming </span>
+                    </div>
+                  @*
+                    @_username, @FullName
+                    
+                  *@
+
+                   @*  @_user.FirstName 🪙 *@
+                </div>
+                <div class="text-4xl font-bol text-center">
+                    1,234 <span class="text-muted-foreground text-2xl">TOKENS</span>
+                </div>
+
+                <a href="/index">
+
+                    <button type="submit"
+                            style="background-color:#C27406; width:120px  padding: 50px 50px"
+                            class="w-120 h-120 rounded-full inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-primary-foreground h-11 rounded-md px-8 w-full bg-[#111325] hover:bg-[#111325]/90">
+                    The OMNIX
+                </button>
+                </a>
+
+               <div class="text-muted-foreground text-sm ">
+                    Next airdrop in <span class="font-medium">@*  @NewTimeLeft.ToString("hh\\:mm\\:ss") *@ </span>
+                </div>
+            </div>
+            @* <div class="bg-card rounded-lg p-6 w-full max-w-md flex flex-col gap-4">
+                <h2 class="text-lg font-medium">Airdrop History</h2>
+                <div class="grid gap-3">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <div class="bg-muted rounded-full w-8 h-8 flex items-center justify-center text-sm">🪙</div>
+                            <div>
+                                <div class="font-medium">100 TOKENS</div>
+                                <div class="text-xs text-muted-foreground">June 1, 2023</div>
+                            </div>
+                        </div>
+                        <div class="bg-muted rounded-full px-2 py-1 text-xs font-medium">Claimed</div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <div class="bg-muted rounded-full w-8 h-8 flex items-center justify-center text-sm">🪙</div>
+                            <div>
+                                <div class="font-medium">50 TOKENS</div>
+                                <div class="text-xs text-muted-foreground">May 25, 2023</div>
+                            </div>
+                        </div>
+                        <div class="bg-muted rounded-full px-2 py-1 text-xs font-medium">Claimed</div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <div class="bg-muted rounded-full w-8 h-8 flex items-center justify-center text-sm">🪙</div>
+                            <div>
+                                <div class="font-medium">75 TOKENS</div>
+                                <div class="text-xs text-muted-foreground">May 19, 2023</div>
+                            </div>
+                        </div>
+                        <div class="bg-muted rounded-full px-2 py-1 text-xs font-medium">Claimed</div>
+                    </div>
+                </div>
+            </div> *@
+        </main>
+       
+    </div>
+</div>
+
+
+
+
+@code{
+    private string _username;
+    private string Storedusername;
+    private string FullName;
+    private TelegramUser _user = new TelegramUser();
+    private TelegramBotClient _bot = new TelegramBotClient("6925979618:AAFqPLIiTUBJ6VrC24f1rbOJxoO6mhLvLn0");
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            //Storedusername = await lStorage.GetItemAsStringAsync("username");
+            StateHasChanged();
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+       /* if(string.IsNullOrWhiteSpace(lStorage.GetItemAsStringAsync("telegramUserInfo") != null))
+        {
+            
+            var storedUserInfo = await lStorage.GetItemAsStringAsync("telegramUserInfo");
+
+            if (string.IsNullOrWhiteSpace(storedUserInfo))
+            {
+                var telegramUser = await GetUserTelegramInfo(_user);
+
+                if (telegramUser != null)
+                {
+                    await lStorage.SetItemAsStringAsync("telegramUserInfo", JsonConvert.SerializeObject(telegramUser));
+                    _user = telegramUser;
+                }
+            }
+            else
+            {
+                _user = JsonConvert.DeserializeObject<TelegramUser>(storedUserInfo);
+            }
+        }*/
+
+
+       /* var receiverOptions = new ReceiverOptions
+            {
+                AllowedUpdates = new UpdateType[]
+                    {
+                    UpdateType.Message,
+                    UpdateType.EditedMessage,
+                    }
+            };
+
+        // var user = await lStorage.GetItemAsStringAsync("username");
+        if (!string.IsNullOrWhiteSpace(Storedusername))
+        {
+
+            var result = await telegramServ.GetUser(Storedusername);
+            if (result != null)
+            {
+                FullName = $"{result.FirstName}, {result.LastName}";
+                _username = $"{result.Username}";
+                StateHasChanged();
+            }
+            else
+            {
+                _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions);
+            }
+        }
+        else
+        {
+
+            _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions);
+        } */
+
+
+    }
+
+    private async Task ErrorHandler(ITelegramBotClient client, Exception exception, CancellationToken token)
+    {
+
+    }
+
+    private async Task UpdataeHandler(ITelegramBotClient client, Update update, CancellationToken token)
+    {
+        if (update.Type == UpdateType.Message)
+        {
+            if (update.Message.Type == MessageType.Text)
+            {
+
+                var text = update.Message.Text;
+                var id = update.Message.Chat.Id;
+                var Username = update.Message.Chat.Username;
+                var firstName = update.Message.Chat.FirstName;
+                var lastName = update.Message.Chat.LastName;
+                //var location = update.Message.Chat.Location;
+                //var Invitation = update.Message.Chat.InviteLink;
+
+                //Console.WriteLine($"{Username} |{id} | {text}, : from {location}, invited by {Invitation}");
+
+                TelegramUser users = new TelegramUser
+                    {
+                        Username = Username,
+                        FirstName = firstName,
+                        LastName = lastName
+                    };
+
+                await telegramServ.SignInUser(users);
+               // await lStorage.SetItemAsStringAsync("username", users.username);
+                //await CheckUser(users.Username);
+
+
+            }
+        }
+    }
+
+    public async Task<TelegramUser> GetUserTelegramInfo(TelegramUser userInfo)
+    {
+        var updates = await _bot.GetUpdatesAsync();
+        var userUpdate = updates.FirstOrDefault(u => u.Type == UpdateType.Message);
+
+        if (userUpdate != null)
+        {
+            var user = userUpdate.Message.From;
+
+             TelegramUser Duser = new TelegramUser
+                {
+                    Id = user.Id,
+                    Username = user.Username,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    
+                };
+
+            await telegramServ.SignInUser(Duser);
+        }
+
+        return null;
+    }
+
+
+    
+}

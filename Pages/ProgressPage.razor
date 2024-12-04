@@ -1,0 +1,144 @@
+﻿@page "/progress"
+@layout LayoutPage
+@using System.Timers
+@inject NavigationManager navMag
+
+<div class="min-h-screen bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center p-4">
+    <div class="bg-white rounded-lg shadow-xl p-8 w-full max-w-md fade-in">
+        <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Processing</h2>
+        <div class="w-full bg-gray-200 rounded-full h-2.5 mb-6">
+            <div class="bg-blue-600 h-2.5 rounded-full transition-all duration-500 ease-out" style="width: @(Progress)%"></div>
+        </div>
+        <div class="space-y-4">
+            @foreach (var step in Steps)
+            {
+                <div class="flex items-center space-x-3 fade-in" style="animation-delay: @(step.Id * 200)ms">
+                    @if (step.Id < CurrentStep + 1)
+                    {
+                        <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    }
+                    else if (step.Id == CurrentStep + 1)
+                    {
+                        <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+                    }
+                    else
+                    {
+                        <div class="w-6 h-6 rounded-full border-2 border-gray-300"></div>
+                    }
+                    <span class="text-lg @(step.Id <= CurrentStep + 1 ? "text-gray-800" : "text-gray-400")">
+                        @step.Name
+                    </span>
+                </div>
+            }
+        </div>
+        @if (CurrentStep == Steps.Count - 1)
+        {
+            <div class="mt-6 text-center fade-in" style="animation-delay: 500ms">
+                @if (Error)
+                {
+                    <div class="flex items-center justify-center space-x-2 text-red-500">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                        <span>An error occurred. Please try again.</span>
+                    </div>
+                }
+                else
+                {
+                    <div class="flex items-center justify-center space-x-2 text-green-500">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span>Process completed successfully!</span>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+    <div class="align-content-center" style="@BTNClass">
+    <button class="btn btn-primary" @onclick="HomePage">Proceed</button>
+    </div>
+
+@code {
+    private List<Step> Steps = new List<Step>
+    {
+        new Step { Id = 1, Name = "Connecting to server" },
+        new Step { Id = 2, Name = "Verifying credentials" },
+        new Step { Id = 3, Name = "Checking account status" },
+        new Step { Id = 4, Name = "Syncing data" },
+        new Step { Id = 5, Name = "Finalizing" }
+    };
+
+    private int CurrentStep { get; set; } = 0;
+    private int Progress { get; set; } = 0;
+    private bool Error { get; set; } = false;
+    private Timer _timer;
+    private string BTNClass = "display:none";
+    private bool display = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _timer = new Timer(1000);
+        _timer.Elapsed += TimerElapsed;
+        _timer.Start();
+    }
+
+    private void TimerElapsed(object sender, ElapsedEventArgs e)
+    {
+        _timer.Stop();
+        InvokeAsync(() =>
+        {
+            if (CurrentStep < Steps.Count - 1)
+            {
+                CurrentStep++;
+                Progress += 20;
+                StateHasChanged();
+                _timer.Start();
+            }
+            else
+            {
+                Progress = 100;
+                BTNClass = "display:block";
+                Error = new Random().NextDouble() < 0.1; // 10% chance of error
+                StateHasChanged();
+            }
+        });
+    }
+
+    private async Task HomePage()
+    {
+        navMag.NavigateTo("/");
+    }
+    /*private void TimerElapsed(object sender, ElapsedEventArgs e)
+    {
+        if (CurrentStep < Steps.Count - 1)
+        {
+            CurrentStep++;
+            Progress += 20;
+            StateHasChanged();
+        }
+        else
+        {
+            _timer.Stop();
+            Progress = 100;
+            Error = new Random().NextDouble() < 0.1; // 10% chance of error
+            StateHasChanged();
+        }
+    } */
+
+    public void Dispose()
+    {
+        _timer?.Dispose();
+    }
+
+    private class Step
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+}
+
+
