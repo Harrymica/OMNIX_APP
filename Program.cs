@@ -81,7 +81,7 @@ namespace OMNIX_APP
 
             var me = botClient.GetMeAsync();
             Console.WriteLine($"Start listening for @{me.Result.Username}");
-            Console.ReadLine(); // Keep the application running until Enter is pressed
+            //Console.ReadLine(); // Keep the application running until Enter is pressed
 
             cts.Cancel(); // Stop the bot
 
