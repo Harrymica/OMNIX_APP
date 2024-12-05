@@ -93,8 +93,16 @@
     private string _username;
     private string Storedusername;
     private string FullName;
+
+
+
+
+    private long _userId;
+    private string _firstName;
+
+
     private TelegramUser _user = new TelegramUser();
-    private TelegramBotClient _bot = new TelegramBotClient("6925979618:AAFqPLIiTUBJ6VrC24f1rbOJxoO6mhLvLn0");
+    private TelegramBotClient _bot = new TelegramBotClient("7324366764:AAE0FiQdBDSnHgZvnv2ZU3f5f9DAiGIMhx8");
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -107,28 +115,28 @@
 
     protected override async Task OnInitializedAsync()
     {
-        
-       /* if(string.IsNullOrWhiteSpace(lStorage.GetItemAsStringAsync("telegramUserInfo") != null))
-        {
-            
+        /* if(string.IsNullOrWhiteSpace(lStorage.GetItemAsStringAsync("telegramUserInfo") != null))
+            {
+
             var storedUserInfo = await lStorage.GetItemAsStringAsync("telegramUserInfo");
 
             if (string.IsNullOrWhiteSpace(storedUserInfo))
-            {
+                {
                 var telegramUser = await GetUserTelegramInfo(_user);
 
                 if (telegramUser != null)
-                {
+                    {
                     await lStorage.SetItemAsStringAsync("telegramUserInfo", JsonConvert.SerializeObject(telegramUser));
-                    _user = telegramUser;
-                }
+                _user = telegramUser;
+            }
             }
             else
-            {
+                {
                 _user = JsonConvert.DeserializeObject<TelegramUser>(storedUserInfo);
-            }
+        }
         }*/
 
+        //await AuthenticateUser();
 
         var receiverOptions = new ReceiverOptions
             {
@@ -139,28 +147,30 @@
                     }
             };
         _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions);
+        await GetUserTelegramInfo();
+
         // var user = await lStorage.GetItemAsStringAsync("username");
-       /* if (!string.IsNullOrWhiteSpace(Storedusername))
-        {
+             /* if (!string.IsNullOrWhiteSpace(Storedusername))
+             {
 
-            var result = await telegramServ.GetUser(Storedusername);
-            if (result != null)
-            {
-                FullName = $"{result.FirstName}, {result.LastName}";
-                _username = $"{result.Username}";
-                StateHasChanged();
-            }
-            else
-            {
-                _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions);
-            }
-        }
-        else
-        {
+             var result = await telegramServ.GetUser(Storedusername);
+                 if (result != null)
+                 {
+                 FullName = $"{result.FirstName}, {result.LastName}";
+                 _username = $"{result.Username}";
+             StateHasChanged();
+                 }
+                 else
+                 {
+                 _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions);
+         }
+         }
+             else
+             {
 
-            _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions);
+             _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions);
         } */
-       // await telegramServ.SignInUser();
+        // await telegramServ.SignInUser();
 
     }
 
@@ -171,6 +181,9 @@
 
     private async Task UpdataeHandler(ITelegramBotClient client, Update update, CancellationToken token)
     {
+        var updates = await _bot.GetUpdatesAsync();
+        var userUpdate = updates.FirstOrDefault(u => u.Type == UpdateType.Message);
+
         if (update.Type == UpdateType.Message)
         {
             if (update.Message.Type == MessageType.Text)
@@ -194,7 +207,7 @@
                     };
 
                 await telegramServ.SignInUser(users);
-               // await lStorage.SetItemAsStringAsync("username", users.username);
+                // await lStorage.SetItemAsStringAsync("username", users.username);
                 //await CheckUser(users.Username);
 
 
@@ -202,7 +215,7 @@
         }
     }
 
-    public async Task<TelegramUser> GetUserTelegramInfo(TelegramUser userInfo)
+    public async Task<TelegramUser> GetUserTelegramInfo()
     {
         var updates = await _bot.GetUpdatesAsync();
         var userUpdate = updates.FirstOrDefault(u => u.Type == UpdateType.Message);
@@ -211,13 +224,13 @@
         {
             var user = userUpdate.Message.From;
 
-             TelegramUser Duser = new TelegramUser
+            TelegramUser Duser = new TelegramUser
                 {
                     Id = user.Id,
                     Username = user.Username,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
-                    
+
                 };
 
             await telegramServ.SignInUser(Duser);
@@ -226,6 +239,4 @@
         return null;
     }
 
-
-    
 }
