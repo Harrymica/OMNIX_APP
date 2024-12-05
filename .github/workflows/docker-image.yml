@@ -45,4 +45,4 @@ jobs:
           context: .
           file: ./OMNIX_APP/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/omnixtelegramapp:v1.0, ${{ secrets.DOCKERHUB_USERNAME }}/omnixtelegramapp:v1.0-${{ github.run_number }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/omnixtelegramapp:v1.0, ${{ secrets.DOCKERHUB_USERNAME }}/omnixtelegramapp:${{ github.run_number }}
