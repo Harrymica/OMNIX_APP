@@ -43,7 +43,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: /Dockerfile
+          file: Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/omnixtelegramapp:v1.0, ${{ secrets.DOCKERHUB_USERNAME }}/omnixtelegramapp:${{ github.run_number }}
           working-directory: ./OMNIX_APP
