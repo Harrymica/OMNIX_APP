@@ -30,7 +30,7 @@
                    @*  @_user.FirstName 🪙 *@
                 </div>
                 <div class="text-4xl font-bol text-center">
-                    1,234 <span class="text-muted-foreground text-2xl">TOKENS</span>
+                    1,235 <span class="text-muted-foreground text-2xl">TOKENS</span>
                 </div>
 
                 <a href="/index">
@@ -107,7 +107,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-
+        
        /* if(string.IsNullOrWhiteSpace(lStorage.GetItemAsStringAsync("telegramUserInfo") != null))
         {
             
@@ -130,7 +130,7 @@
         }*/
 
 
-       /* var receiverOptions = new ReceiverOptions
+        var receiverOptions = new ReceiverOptions
             {
                 AllowedUpdates = new UpdateType[]
                     {
@@ -138,9 +138,9 @@
                     UpdateType.EditedMessage,
                     }
             };
-
+        _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions);
         // var user = await lStorage.GetItemAsStringAsync("username");
-        if (!string.IsNullOrWhiteSpace(Storedusername))
+       /* if (!string.IsNullOrWhiteSpace(Storedusername))
         {
 
             var result = await telegramServ.GetUser(Storedusername);
@@ -160,7 +160,7 @@
 
             _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions);
         } */
-
+       // await telegramServ.SignInUser();
 
     }
 
