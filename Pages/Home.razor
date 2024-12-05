@@ -138,7 +138,7 @@
                     UpdateType.EditedMessage,
                     }
             };
-       
+        _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions);
         // var user = await lStorage.GetItemAsStringAsync("username");
        /* if (!string.IsNullOrWhiteSpace(Storedusername))
         {

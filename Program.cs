@@ -15,9 +15,12 @@ namespace OMNIX_APP
 {
     public class Program
     {
-      
+        private static ITelegramBotClient botClient;
         public static void Main(string[] args)
         {
+            // Start the Telegram bot in a separate thread
+            Task.Run(() => StartTelegramBot());
+
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
@@ -53,6 +56,75 @@ namespace OMNIX_APP
             
 
         }
-        
+
+
+
+        private static async Task StartTelegramBot()
+        {
+            //My Telegrambot goes here
+
+            string token = "7324366764:AAE0FiQdBDSnHgZvnv2ZU3f5f9DAiGIMhx8"; // e.g., "123456789:ABCdefGhIJKlmnoPQRstuVWXyz"
+            botClient = new TelegramBotClient(token);
+
+            using var cts = new CancellationTokenSource();
+            var receiverOptions = new ReceiverOptions
+            {
+                AllowedUpdates = { } // Receive all update types
+            };
+
+            botClient.StartReceiving(
+                HandleUpdateAsync,
+                HandleErrorAsync,
+                receiverOptions,
+                cancellationToken: cts.Token
+            );
+
+            var me = botClient.GetMeAsync();
+            Console.WriteLine($"Start listening for @{me.Result.Username}");
+            Console.ReadLine(); // Keep the application running until Enter is pressed
+
+            cts.Cancel(); // Stop the bot
+
+        }
+
+        private static async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+        {
+            if (update.Type == UpdateType.Message && update.Message?.Type == MessageType.Text)
+            {
+                var chatId = update.Message.Chat.Id;
+                var userMessage = update.Message.Text;
+
+                Console.WriteLine($"Received a '{userMessage}' message in chat {chatId}.");
+
+                if (userMessage.Equals("/start", StringComparison.OrdinalIgnoreCase))
+                {
+                    // Create an inline keyboard button that redirects to your website
+                    var inlineKeyboard = new InlineKeyboardMarkup(new[]
+                    {
+            InlineKeyboardButton.WithUrl("Visit Our Website", "https://omnix-app.onrender.com/")
+        });
+
+                    await botClient.SendTextMessageAsync(
+                        chatId: chatId,
+                        text: "Welcome! Click the button below to start mining.",
+                        replyMarkup: inlineKeyboard,
+                        cancellationToken: cancellationToken);
+                }
+                else
+                {
+                    // Reply back to the user with their message prefixed
+                    await botClient.SendTextMessageAsync(
+                        chatId: chatId,
+                        text: $"This is what you said: {userMessage}",
+                        cancellationToken: cancellationToken);
+                }
+            }
+        }
+
+        private static Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
+        {
+            Console.WriteLine($"Error occurred: {exception.Message}");
+            return Task.CompletedTask;
+        }
     }
 }
