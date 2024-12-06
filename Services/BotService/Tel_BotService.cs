@@ -150,11 +150,12 @@ namespace OMNIX_APP.Services.BotService
 
         public async Task<TelegramUser> GetUserTelegramInfo()
         {
+            Console.WriteLine("Bot started");
             if (botClient == null)
             {
                 await StartTelegramBot();
-            }
 
+            }
             TelegramUser Duser = new TelegramUser();
                 var updates = await botClient.GetUpdatesAsync();
                 var userUpdate = updates.FirstOrDefault(u => u.Type == UpdateType.Message);

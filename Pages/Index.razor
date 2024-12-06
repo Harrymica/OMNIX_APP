@@ -73,6 +73,7 @@
         IsScaling = false;
         StateHasChanged();
     }
+    private TelegramBotClient _bot = new TelegramBotClient("7324366764:AAE0FiQdBDSnHgZvnv2ZU3f5f9DAiGIMhx8");
 
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -86,75 +87,50 @@
     protected override async Task OnInitializedAsync()
     {
 
-
-        await botService.GetUserTelegramInfo();
-        if (botService.GetUserTelegramInfo().Result != null)
+        await GetUserTelegramInfo();
+        if (GetUserTelegramInfo != null)
         {
-            _user = botService.GetUserTelegramInfo().Result;
-            Console.WriteLine(_user.Username);
+            _user = GetUserTelegramInfo().Result;
         }
-        else
-        {
-            Console.Write("user is empty");
-        }
-        /* if(string.IsNullOrWhiteSpace(lStorage.GetItemAsStringAsync("telegramUserInfo") != null))
-        {
-
-        var storedUserInfo = await lStorage.GetItemAsStringAsync("telegramUserInfo");
-
-        if (string.IsNullOrWhiteSpace(storedUserInfo))
-            {
-            var telegramUser = await GetUserTelegramInfo(_user);
-
-            if (telegramUser != null)
-                {
-                await lStorage.SetItemAsStringAsync("telegramUserInfo", JsonConvert.SerializeObject(telegramUser));
-            _user = telegramUser;
-        }
-        }
-        else
-            {
-            _user = JsonConvert.DeserializeObject<TelegramUser>(storedUserInfo);
+        //await botService.GetUserTelegramInfo();
+        // if (botService.GetUserTelegramInfo().Result != null)
+        // {
+        //     _user = botService.GetUserTelegramInfo().Result;
+        //     Console.WriteLine(_user.Username);
+        // }
+        // else
+        // {
+        //     Console.Write("user is empty");
+        // }
     }
-    }*/
-
-        //await AuthenticateUser();
-
-        // var receiverOptions = new ReceiverOptions
-        //     {
-        //         AllowedUpdates = new UpdateType[]
-        //             {
-        //             UpdateType.Message,
-        //             UpdateType.EditedMessage,
-        //             }
-        //     };
-        // _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions);
-        //await GetUserTelegramInfo();
-
-        // var user = await lStorage.GetItemAsStringAsync("username");
-        /* if (!string.IsNullOrWhiteSpace(Storedusername))
+        public async Task<TelegramUser> GetUserTelegramInfo()
         {
 
-        var result = await telegramServ.GetUser(Storedusername);
-            if (result != null)
+
+            TelegramUser Duser = new TelegramUser();
+            var updates = await _bot.GetUpdatesAsync();
+            var userUpdate = updates.FirstOrDefault(u => u.Type == UpdateType.Message);
+            if (userUpdate != null)
             {
-            FullName = $"{result.FirstName}, {result.LastName}";
-            _username = $"{result.Username}";
-        StateHasChanged();
+                var user = userUpdate.Message.From;
+                //{
+                Duser.Id = user.Id;
+                Duser.Username = user.Username;
+                Duser.FirstName = user.FirstName;
+                Duser.LastName = user.LastName;
+                //};
+
+            await botService.SignInUser(Duser);
             }
-            else
-            {
-            _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions);
-    }
-    }
-        else
-        {
-
-        _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions);
-       } */
-        // await telegramServ.SignInUser();
+            return Duser;
 
 
+        }
+
+       
+
     }
+
+   
 }
 
