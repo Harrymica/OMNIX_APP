@@ -3,11 +3,7 @@
 @layout LayoutPage
 
 
-@* <section class=" bg-gradient-to-br from-purple-600 to-blue-500 flex items-center justify-center relative overflow-hidden h-full w-full"> *@
-
-
-
-    <div class="page bg-gradient-to-br from-purple-600 to-blue-500 flex items-center justify-center relative overflow-hidden h-full w-full">
+  <div class="page bg-gradient-to-br from-purple-600 to-blue-500 flex items-center justify-center relative overflow-hidden h-full w-full">
         <!-- Curved divider -->
         <div class="absolute inset-0 z-0">
             <svg class="absolute top-0 left-0 w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -60,20 +56,10 @@
         }
     </div>
 
-@* </section> *@
 
 @code {
     private bool IsAnimating { get; set; } = false;
     private bool IsScaling { get; set; } = false;
-
-    // private async Task HandleButtonClick()
-    // {
-    //     IsAnimating = true;
-    //     StateHasChanged();
-    //     await Task.Delay(1000);
-    //     IsAnimating = false;
-    //     StateHasChanged();
-    // }
 
     private async Task HandleButtonClick()
     {
