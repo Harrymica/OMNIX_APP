@@ -1,5 +1,7 @@
 ﻿@page "/index"
 @inject IJSRuntime JSRuntime
+@inject ILocalStorageService lStorage
+@inject Tel_BotService botService
 @layout LayoutPage
 
 
@@ -60,7 +62,7 @@
 @code {
     private bool IsAnimating { get; set; } = false;
     private bool IsScaling { get; set; } = false;
-
+    private TelegramUser _user = new TelegramUser();
     private async Task HandleButtonClick()
     {
         IsScaling = true;
@@ -77,6 +79,80 @@
         {
             await JSRuntime.InvokeVoidAsync("initializeParticles");
         }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+
+        await botService.GetUserTelegramInfo();
+        if (botService.GetUserTelegramInfo().Result != null)
+        {
+            _user = botService.GetUserTelegramInfo().Result;
+            Console.WriteLine(_user.Username);
+        }
+        else
+        {
+            Console.Write("user is empty");
+        }
+        /* if(string.IsNullOrWhiteSpace(lStorage.GetItemAsStringAsync("telegramUserInfo") != null))
+        {
+
+        var storedUserInfo = await lStorage.GetItemAsStringAsync("telegramUserInfo");
+
+        if (string.IsNullOrWhiteSpace(storedUserInfo))
+            {
+            var telegramUser = await GetUserTelegramInfo(_user);
+
+            if (telegramUser != null)
+                {
+                await lStorage.SetItemAsStringAsync("telegramUserInfo", JsonConvert.SerializeObject(telegramUser));
+            _user = telegramUser;
+        }
+        }
+        else
+            {
+            _user = JsonConvert.DeserializeObject<TelegramUser>(storedUserInfo);
+    }
+    }*/
+
+        //await AuthenticateUser();
+
+        // var receiverOptions = new ReceiverOptions
+        //     {
+        //         AllowedUpdates = new UpdateType[]
+        //             {
+        //             UpdateType.Message,
+        //             UpdateType.EditedMessage,
+        //             }
+        //     };
+        // _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions);
+        //await GetUserTelegramInfo();
+
+        // var user = await lStorage.GetItemAsStringAsync("username");
+        /* if (!string.IsNullOrWhiteSpace(Storedusername))
+        {
+
+        var result = await telegramServ.GetUser(Storedusername);
+            if (result != null)
+            {
+            FullName = $"{result.FirstName}, {result.LastName}";
+            _username = $"{result.Username}";
+        StateHasChanged();
+            }
+            else
+            {
+            _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions);
+    }
+    }
+        else
+        {
+
+        _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions);
+       } */
+        // await telegramServ.SignInUser();
+
+
     }
 }
 

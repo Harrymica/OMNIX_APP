@@ -1,5 +1,4 @@
 ﻿@page "/"
-@using OMNIX_APP.Services.BotService
 @layout LayoutPage 
 @inject ITelegramAuth telegramServ
 @inject ILocalStorageService lStorage
@@ -119,11 +118,11 @@
     {
 
 
-        await botService.GetUserTelegramInfo();
-        if (botService.GetUserTelegramInfo().Result != null)
-        {
-            _user = botService.GetUserTelegramInfo().Result;
-        }Console.WriteLine(_user.Username);
+        // await botService.GetUserTelegramInfo();
+        // if (botService.GetUserTelegramInfo().Result != null)
+        // {
+        //     _user = botService.GetUserTelegramInfo().Result;
+        // }Console.WriteLine(_user.Username);
             /* if(string.IsNullOrWhiteSpace(lStorage.GetItemAsStringAsync("telegramUserInfo") != null))
             {
 
