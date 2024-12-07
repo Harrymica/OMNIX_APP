@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using Telegram.Bot.Types.ReplyMarkups
 @layout LayoutPage 
 @inject ITelegramAuth telegramServ
 @inject ILocalStorageService lStorage
@@ -172,18 +173,40 @@
             {
 
                 var text = update.Message.Text;
-                var id = update.Message.Chat.Id;
+                var chatid = update.Message.Chat.Id;
                 var Username = update.Message.From.Username;//Chat.Username;
                 _firstName = update.Message.From.FirstName;
                 var lastName = update.Message.Chat.LastName;
-                var getUser = update.Message.From.Id;
+                var getId = update.Message.From.Id;
+                
 
+                if (text.Equals("/start", StringComparison.OrdinalIgnoreCase))
+                {
+                    // Create an inline keyboard button that redirects to your website
+                    var inlineKeyboard = new InlineKeyboardMarkup(new[]
+                    {
+                    InlineKeyboardButton.WithUrl("Visit Our Website", "https://omnix-app.onrender.com/")
+                });
 
-                Console.WriteLine($"{Username} |{id} | {text}, {getUser}");
+                    await _bot.SendTextMessageAsync(
+                        chatId: chatid,
+                        text: $"Welcome! Click the button below to start mining, {_firstName}",
+                        replyMarkup: inlineKeyboard,
+                        cancellationToken: token);
+                }
+                else
+                {
+                    // Reply back to the user with their message prefixed
+                    await _bot.SendTextMessageAsync(
+                        chatId: chatid,
+                        text: $"This is what you said: {text}",
+                        cancellationToken: token);
+                }
+                Console.WriteLine($"{Username} |{chatid} | {text}, {_firstName}");
 
                 TelegramUser users = new TelegramUser
                     {
-                        Id = getUser,
+                        Id = getId,
                         Username = Username,
                         FirstName = _firstName,
                         LastName = lastName
