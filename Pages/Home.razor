@@ -21,7 +21,7 @@
                    
                     <div class="loader">
                         
-                        <span>Farming </span>
+                        <span>@_firstName </span>
                     </div>
                   @*
                     @_username, @FullName
@@ -103,7 +103,8 @@
 
 
     private TelegramUser _user = new TelegramUser();
-    //private TelegramBotClient _bot = new TelegramBotClient("7324366764:AAE0FiQdBDSnHgZvnv2ZU3f5f9DAiGIMhx8");
+    private TelegramBotClient _bot = new TelegramBotClient("7324366764:AAE0FiQdBDSnHgZvnv2ZU3f5f9DAiGIMhx8");
+
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -116,76 +117,77 @@
 
     protected override async Task OnInitializedAsync()
     {
-
-
-        // await botService.GetUserTelegramInfo();
-        // if (botService.GetUserTelegramInfo().Result != null)
-        // {
-        //     _user = botService.GetUserTelegramInfo().Result;
-        // }Console.WriteLine(_user.Username);
-            /* if(string.IsNullOrWhiteSpace(lStorage.GetItemAsStringAsync("telegramUserInfo") != null))
+        var receiverOptions = new ReceiverOptions
             {
-
-            var storedUserInfo = await lStorage.GetItemAsStringAsync("telegramUserInfo");
-
-            if (string.IsNullOrWhiteSpace(storedUserInfo))
-                {
-                var telegramUser = await GetUserTelegramInfo(_user);
-
-                if (telegramUser != null)
-                    {
-                    await lStorage.SetItemAsStringAsync("telegramUserInfo", JsonConvert.SerializeObject(telegramUser));
-                _user = telegramUser;
-            }
-            }
-            else
-                {
-                _user = JsonConvert.DeserializeObject<TelegramUser>(storedUserInfo);
-        }
-        }*/
-
-        //await AuthenticateUser();
-
-        // var receiverOptions = new ReceiverOptions
-        //     {
-        //         AllowedUpdates = new UpdateType[]
-        //             {
-        //             UpdateType.Message,
-        //             UpdateType.EditedMessage,
-        //             }
-        //     };
-        // _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions);
-        //await GetUserTelegramInfo();
+                AllowedUpdates = new UpdateType[]
+                        {
+                    UpdateType.Message,
+                    UpdateType.EditedMessage,
+                        }
+            };
 
         // var user = await lStorage.GetItemAsStringAsync("username");
-             /* if (!string.IsNullOrWhiteSpace(Storedusername))
-             {
+        /*if (!string.IsNullOrWhiteSpace(Storedusername))
+        {
 
-             var result = await telegramServ.GetUser(Storedusername);
-                 if (result != null)
-                 {
-                 FullName = $"{result.FirstName}, {result.LastName}";
-                 _username = $"{result.Username}";
-             StateHasChanged();
-                 }
-                 else
-                 {
-                 _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions);
-         }
-         }
-             else
-             {
+            var result = await telegramServ.GetUser(Storedusername);
+            if (result != null)
+            {
+                FullName = $"{result.FirstName}, {result.LastName}";
+                _username = $"{result.username}";
+                StateHasChanged();
+            }
+            else
+            {
+                _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions);
+            }
+        }
+        else
+        {
 
-             _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions);
-        } */
-        // await telegramServ.SignInUser();
-
+            _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions);
+        }*/
+        _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions);
 
     }
 
-    
+    private async Task ErrorHandler(ITelegramBotClient client, Exception exception, CancellationToken token)
+    {
+
+    }
+
+    private async Task UpdataeHandler(ITelegramBotClient client, Update update, CancellationToken token)
+    {
+        if (update.Type == UpdateType.Message)
+        {
+            if (update.Message.Type == MessageType.Text)
+            {
+
+                var text = update.Message.Text;
+                var id = update.Message.Chat.Id;
+                var Username = update.Message.Chat.Username;
+                _firstName = update.Message.Chat.FirstName;
+                var lastName = update.Message.Chat.LastName;
+                var getUser = update.Message.From.Id;
 
 
+                Console.WriteLine($"{Username} |{id} | {text}");
 
-    
+                TelegramUser users = new TelegramUser
+                    {
+                        Id = getUser,
+                        Username = Username,
+                        FirstName = _firstName,
+                        LastName = lastName
+                    };
+
+                await telegramServ.SignInUser(users);
+               
+
+
+            }
+        }
+    }
+
+
 }
