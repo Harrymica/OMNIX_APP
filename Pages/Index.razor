@@ -20,6 +20,8 @@
 
             <h1 class="text-4xl font-bold mb-6 text-white drop-shadow-lg">
             <span class="text-gradient">THEOMNIX 
+
+                @if(_user != null)
                 @_user.Username
             </span>
 
@@ -87,11 +89,11 @@
     protected override async Task OnInitializedAsync()
     {
 
-        await GetUserTelegramInfo();
-        if (GetUserTelegramInfo != null)
-        {
-            _user = GetUserTelegramInfo().Result;
-        }
+        //await GetUserTelegramInfo();
+        // if (GetUserTelegramInfo != null)
+        // {
+        //     _user = GetUserTelegramInfo().Result;
+        // }
         //await botService.GetUserTelegramInfo();
         // if (botService.GetUserTelegramInfo().Result != null)
         // {
@@ -102,6 +104,12 @@
         // {
         //     Console.Write("user is empty");
         // }
+
+        // Simulate receiving an update (you would normally get this from the bot's message handling)
+        var update = new Update(); // You would replace this with actual updates received from Telegram.
+
+        await HandleUpdateAsync(_bot, update, CancellationToken.None);
+
     }
         public async Task<TelegramUser> GetUserTelegramInfo()
         {
@@ -127,9 +135,32 @@
 
         }
 
-       
 
+    private async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    {
+        _user = await GetUserTelegramInfo(update);
+        if (_user != null)
+        {
+            // Here you can save or process the user information as needed.
+            Console.WriteLine($"User ID: {_user.Id}, Username: {_user.Username}, First Name: {_user.FirstName}, Last Name: {_user.LastName}");
+        }
     }
+    public async Task<TelegramUser> GetUserTelegramInfo(Update update)
+    {
+        if (update.Type == UpdateType.Message && update.Message?.From != null)
+        {
+            var user = update.Message.From;
+            return new TelegramUser
+                {
+                    Id = user.Id,
+                    Username = user.Username,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName
+                };
+        }
+        return null;
+    }
+}
 
    
 }
