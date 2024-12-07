@@ -127,27 +127,27 @@
             };
 
         // var user = await lStorage.GetItemAsStringAsync("username");
-        /*if (!string.IsNullOrWhiteSpace(Storedusername))
-        {
+            /*if (!string.IsNullOrWhiteSpace(Storedusername))
+            {
 
             var result = await telegramServ.GetUser(Storedusername);
-            if (result != null)
-            {
+                if (result != null)
+                {
                 FullName = $"{result.FirstName}, {result.LastName}";
                 _username = $"{result.username}";
-                StateHasChanged();
+            StateHasChanged();
             }
-            else
-            {
+                else
+                {
                 _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions);
-            }
+        }
         }
         else
-        {
+            {
 
             _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions);
         }*/
-        _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions);
+        //_bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions);
 
     }
 
@@ -165,13 +165,13 @@
 
                 var text = update.Message.Text;
                 var id = update.Message.Chat.Id;
-                var Username = update.Message.Chat.Username;
+                var Username = update.Message.From.Username;//Chat.Username;
                 _firstName = update.Message.Chat.FirstName;
                 var lastName = update.Message.Chat.LastName;
                 var getUser = update.Message.From.Id;
 
 
-                Console.WriteLine($"{Username} |{id} | {text}");
+                Console.WriteLine($"{Username} |{id} | {text}, {getUser}");
 
                 TelegramUser users = new TelegramUser
                     {
