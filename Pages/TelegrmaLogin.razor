@@ -1,0 +1,48 @@
+﻿@page "/telegram-login"
+@using System.Text.Json
+@inject IJSRuntime JsRuntime
+
+<h3>Login with Telegram</h3>
+<button @onclick="LoginWithTelegram">Login with Telegram</button>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        // Optionally, you can initialize any state or call APIs here
+    }
+
+    private async Task LoginWithTelegram()
+    {
+        await JsRuntime.InvokeVoidAsync("loginWithTelegram");
+    }
+
+    [JSInvokable("ReceiveTelegramUserInfo")]
+    public async Task ReceiveTelegramUserInfo(JsonElement userInfo)
+    {
+        // Validate and process the user info received from Telegram
+        var isValid = ValidateTelegramPayload(userInfo);
+        if (!isValid)
+        {
+            await JsRuntime.InvokeVoidAsync("alert", "Invalid Telegram payload.");
+            return;
+        }
+
+        var id = userInfo.GetProperty("id").GetInt64();
+        var username = userInfo.GetProperty("username").GetString();
+
+        // Here you can store or use the user's information as needed
+        await ProcessUserInfo(id, username);
+    }
+
+    private bool ValidateTelegramPayload(JsonElement userInfo)
+    {
+        // Implement your validation logic here (e.g., hash verification)
+        return true; // Replace with actual validation
+    }
+
+    private async Task ProcessUserInfo(long id, string username)
+    {
+        // Handle the user information (e.g., save it in session, database, etc.)
+        await Task.CompletedTask; // Replace with actual processing logic
+    }
+}

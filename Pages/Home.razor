@@ -22,7 +22,7 @@
                    
                     <div class="loader">
                         
-                        <span>@_firstName </span>
+                        <span>  @_firstName  </span>
                     </div>
                   @*
                     @_username, @FullName
@@ -96,9 +96,6 @@
     private string Storedusername;
     private string FullName;
 
-
-
-
     private long _userId;
     private string _firstName;
 
@@ -128,33 +125,33 @@
                         }
             };
 
-        // var user = await lStorage.GetItemAsStringAsync("username");
-            /*if (!string.IsNullOrWhiteSpace(Storedusername))
+        //var user = await lStorage.GetItemAsStringAsync("username");
+        /* if (!string.IsNullOrWhiteSpace(Storedusername))
             {
 
             var result = await telegramServ.GetUser(Storedusername);
-                if (result != null)
-                {
-                FullName = $"{result.FirstName}, {result.LastName}";
-                _username = $"{result.username}";
+            if (result != null)
+            {
+            FullName = $"{result.FirstName}, {result.LastName}";
+            _username = $"{result.username}";
             StateHasChanged();
             }
-                else
-                {
-                _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions);
+            else
+            {
+            _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions, cancellationToken: cts.Token);
         }
         }
         else
-            {
+        {
 
-            _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions);
-        }*/
+        _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions, cancellationToken: cts.Token);
+    } */
         _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions, cancellationToken: cts.Token);
 
         var me = await _bot.GetMeAsync();
 
         Console.WriteLine($"Start listening for @{me.Username}, {_firstName}");
-        Console.ReadLine(); // Keep the application running until Enter is pressed
+       // Console.ReadLine(); // Keep the application running until Enter is pressed
 
         cts.Cancel(); // Stop the bot
 
@@ -178,7 +175,14 @@
                 _firstName = update.Message.From.FirstName;
                 var lastName = update.Message.Chat.LastName;
                 var getId = update.Message.From.Id;
-                
+
+                //Return Info to the user
+                // GetTelUserDetails().Id = getId;
+                // GetTelUserDetails().FirstName = _firstName;
+                // GetTelUserDetails().LastName = lastName;
+                // GetTelUserDetails().Username = Username;
+
+
 
                 if (text.Equals("/start", StringComparison.OrdinalIgnoreCase))
                 {
@@ -212,13 +216,17 @@
                         LastName = lastName
                     };
 
-                await telegramServ.SignInUser(users);
-               
+                await telegramServ.SignUpUser(users);
+
 
 
             }
         }
     }
 
+    // private TelegramUser GetTelUserDetails()
+    // {
+    //     return GetTelUserDetails();
+    // }
 
 }
