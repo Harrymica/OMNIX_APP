@@ -20,7 +20,7 @@ namespace OMNIX_App.Models
         [Column("exchange_name")]
         public string ExchangeName { get; set; }
         [Column("user_id")]
-        public long UserId { get; set; }
+        public string UserId { get; set; }
        
         public TelegramUser User { get; set; }
     }

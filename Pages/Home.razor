@@ -125,35 +125,47 @@
                         }
             };
 
-        //var user = await lStorage.GetItemAsStringAsync("username");
+        //var userId = await lStorage.GetItemAsStringAsync("userId");
         /* if (!string.IsNullOrWhiteSpace(Storedusername))
             {
 
-            var result = await telegramServ.GetUser(Storedusername);
+            var result = await telegramServ.GetUser(userId);
             if (result != null)
             {
-            FullName = $"{result.FirstName}, {result.LastName}";
-            _username = $"{result.username}";
-            StateHasChanged();
+                FullName = $"{result.FirstName}, {result.LastName}";
+                _username = $"{result.username}";
+                StateHasChanged();
             }
             else
             {
             _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions, cancellationToken: cts.Token);
-        }
+            }
         }
         else
         {
 
         _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions, cancellationToken: cts.Token);
-    } */
+         } */
         _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions, cancellationToken: cts.Token);
 
         var me = await _bot.GetMeAsync();
 
         Console.WriteLine($"Start listening for @{me.Username}, {_firstName}");
-       // Console.ReadLine(); // Keep the application running until Enter is pressed
+     
+        cts.Cancel();
 
-        cts.Cancel(); // Stop the bot
+
+       /* TelegramUser Addusers = new TelegramUser
+            {
+                TelegramId = "789055884",
+                Username = "CM9848",
+                FirstName = "Chidubem",
+                LastName = "Michael",
+                StartTime = DateTime.UtcNow
+            }; */
+
+        
+         //await telegramServ.SignUpUser(Addusers);
 
     }
 
@@ -176,13 +188,17 @@
                 var lastName = update.Message.Chat.LastName;
                 var getId = update.Message.From.Id;
 
-                //Return Info to the user
-                // GetTelUserDetails().Id = getId;
-                // GetTelUserDetails().FirstName = _firstName;
-                // GetTelUserDetails().LastName = lastName;
-                // GetTelUserDetails().Username = Username;
 
+                TelegramUser users = new TelegramUser
+                    {
+                        Id = (long)Guid.NewGuid().GetHashCode(),
+                        TelegramId = getId.ToString(),
+                        Username = Username,
+                        FirstName = _firstName,
+                        LastName = lastName
+                    };
 
+                StateHasChanged();
 
                 if (text.Equals("/start", StringComparison.OrdinalIgnoreCase))
                 {
@@ -208,25 +224,11 @@
                 }
                 Console.WriteLine($"{Username} |{chatid} | {text}, {_firstName}");
 
-                TelegramUser users = new TelegramUser
-                    {
-                        Id = getId,
-                        Username = Username,
-                        FirstName = _firstName,
-                        LastName = lastName
-                    };
-
-                await telegramServ.SignUpUser(users);
-
+                
 
 
             }
         }
     }
-
-    // private TelegramUser GetTelUserDetails()
-    // {
-    //     return GetTelUserDetails();
-    // }
 
 }

@@ -10,8 +10,10 @@ namespace OMNIX_App.Models
     [Table("telegram_users")]
     public class TelegramUser : BaseModel
     {
-        [PrimaryKey("id")]
+        [PrimaryKey("id", false)]
         public long Id { get; set; }
+        [Column("telegramid")]
+        public string TelegramId { get; set; }
         [Column("username")]
         public string Username { get; set; }
         [Column("first_name")]

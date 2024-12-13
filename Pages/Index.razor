@@ -121,7 +121,7 @@
             {
                 var user = userUpdate.Message.From;
                 //{
-                Duser.Id = user.Id;
+                Duser.TelegramId = user.Id.ToString();
                 Duser.Username = user.Username;
                 Duser.FirstName = user.FirstName;
                 Duser.LastName = user.LastName;
@@ -151,7 +151,7 @@
             var user = update.Message.From;
             return new TelegramUser
                 {
-                    Id = user.Id,
+                    TelegramId = user.Id.ToString(),
                     Username = user.Username,
                     FirstName = user.FirstName,
                     LastName = user.LastName

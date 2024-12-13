@@ -163,7 +163,7 @@ namespace OMNIX_APP.Services.BotService
                 {
                     var user = userUpdate.Message.From;
                     //{
-                    Duser.Id = user.Id;
+                    Duser.TelegramId = user.Id.ToString();
                     Duser.Username = user.Username;
                     Duser.FirstName = user.FirstName;
                     Duser.LastName = user.LastName;
@@ -182,7 +182,7 @@ namespace OMNIX_APP.Services.BotService
         }
         public async Task<TelegramUser> SignInUser(TelegramUser user)
         {
-            var existingUser = await GetUser(user.Id);
+            var existingUser = await GetUser(user.Id.ToString());
 
             if (existingUser != null)
             {
@@ -207,7 +207,7 @@ namespace OMNIX_APP.Services.BotService
             return insertedUser.Model;//.Data;
         }
 
-        public async Task<TelegramUser> GetUser(long username)
+        public async Task<TelegramUser> GetUser(string userId)
         {
             var url = "https://vwrdiqboqifvqcqejvzl.supabase.co";//Environment.GetEnvironmentVariable("https://vwrdiqboqifvqcqejvzl.supabase.co");
             var key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3cmRpcWJvcWlmdnFjcWVqdnpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjgzNzUzNTMsImV4cCI6MjA0Mzk1MTM1M30.gglFnEhruAVUOcbCE6Us7BxVYnl1MHe9IFAwmWE9G5I";// Environment.GetEnvironmentVariable("");

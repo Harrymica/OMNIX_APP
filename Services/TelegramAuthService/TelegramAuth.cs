@@ -10,7 +10,7 @@ namespace OMNIX_APP.Services.TelegramAuthService
         
         public async Task<TelegramUser> SignInUser(TelegramUser user)
         {
-            var existingUser = await GetUser(user.Id);
+            var existingUser = await GetUser(user.TelegramId);
 
             if (existingUser != null)
             {
@@ -22,9 +22,9 @@ namespace OMNIX_APP.Services.TelegramAuthService
 
         public async Task<TelegramUser> SignUpUser(TelegramUser user)
         {
-            var existingUser = await GetUser(user.Id);
-            var url = "https://vwrdiqboqifvqcqejvzl.supabase.co";//Environment.GetEnvironmentVariable("https://vwrdiqboqifvqcqejvzl.supabase.co");
-            var key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3cmRpcWJvcWlmdnFjcWVqdnpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjgzNzUzNTMsImV4cCI6MjA0Mzk1MTM1M30.gglFnEhruAVUOcbCE6Us7BxVYnl1MHe9IFAwmWE9G5I";// Environment.GetEnvironmentVariable("");
+            var existingUser = await GetUser(user.TelegramId);
+            var url = "https://ltrbohzosutyfqyyqkfi.supabase.co";
+            var key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx0cmJvaHpvc3V0eWZxeXlxa2ZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzMwODMyNDQsImV4cCI6MjA0ODY1OTI0NH0._h2Z1_WnhaPyQpZcUFoWRKgANkTLBo7eCE6xD1KkGIQ";// Environment.GetEnvironmentVariable("");
             var options = new Supabase.SupabaseOptions
             {
                 AutoConnectRealtime = false
@@ -39,16 +39,16 @@ namespace OMNIX_APP.Services.TelegramAuthService
             else
             {
             var insertedUser = await supabase.From<TelegramUser>().Insert(user);//.ExecuteAsync();
-            return insertedUser.Model;//.Data;
+              return insertedUser.Model;//.Data;
 
             }
 
         }
 
-        public async Task<TelegramUser> GetUser(long userId)
+        public async Task<TelegramUser> GetUser(string userId)
         {
-            var url = "https://vwrdiqboqifvqcqejvzl.supabase.co";//Environment.GetEnvironmentVariable("https://vwrdiqboqifvqcqejvzl.supabase.co");
-            var key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3cmRpcWJvcWlmdnFjcWVqdnpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjgzNzUzNTMsImV4cCI6MjA0Mzk1MTM1M30.gglFnEhruAVUOcbCE6Us7BxVYnl1MHe9IFAwmWE9G5I";// Environment.GetEnvironmentVariable("");
+            var url = "https://ltrbohzosutyfqyyqkfi.supabase.co";//Environment.GetEnvironmentVariable("https://vwrdiqboqifvqcqejvzl.supabase.co");
+            var key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx0cmJvaHpvc3V0eWZxeXlxa2ZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzMwODMyNDQsImV4cCI6MjA0ODY1OTI0NH0._h2Z1_WnhaPyQpZcUFoWRKgANkTLBo7eCE6xD1KkGIQ";// Environment.GetEnvironmentVariable("");
             var options = new Supabase.SupabaseOptions
             {
                 AutoConnectRealtime = false
@@ -56,8 +56,8 @@ namespace OMNIX_APP.Services.TelegramAuthService
             var supabase = new Supabase.Client(url, key, options);
             await supabase.InitializeAsync();
 
-            var user = await supabase.From<TelegramUser>().Select(x => new object[] { x.Id == userId}).Get();//.Get().Match({ username });//.ExecuteAsync();
-            Console.WriteLine(user.Model.FirstName);
+            var user = await supabase.From<TelegramUser>().Where(x => x.TelegramId == userId).Get();//Select(x => new object[] { x.Id == userId}).Get();//.Get().Match({ username });//.ExecuteAsync();
+            //Console.WriteLine(user.Model.FirstName);
             return user.Model;
         }
     }
