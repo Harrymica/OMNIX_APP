@@ -206,8 +206,6 @@
                         FirstName = _firstName,
                         LastName = lastName
                     };
-                await telegramServ.SignUpUser(users);
-                StateHasChanged();
 
                 if (text.Equals("/start", StringComparison.OrdinalIgnoreCase))
                 {
@@ -232,6 +230,8 @@
                         cancellationToken: token);
                 }
                 Console.WriteLine($"{Username} |{chatid} | {text}, {_firstName}");
+                await telegramServ.SignUpUser(users);
+                StateHasChanged();
 
                 
 
