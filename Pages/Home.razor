@@ -146,27 +146,36 @@
 
         _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions, cancellationToken: cts.Token);
          } */
-        _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions, cancellationToken: cts.Token);
+        //_bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions, cancellationToken: cts.Token);
 
-        var me = await _bot.GetMeAsync();
+        // var me = await _bot.GetMeAsync();
 
-        Console.WriteLine($"Start listening for @{me.Username}, {_firstName}");
-     
-        cts.Cancel();
+        // Console.WriteLine($"Start listening for @{me.Username}, {_firstName}");
+        //  Console.ReadLine();
+
+        //cts.Cancel();
+        // Start the bot in a separate task
+        _ = Task.Run(() => StartReceivingUpdates());
 
 
-       /* TelegramUser Addusers = new TelegramUser
+    
+
+    }
+
+    private async Task StartReceivingUpdates()
+    {
+        using var cts = new CancellationTokenSource();
+        var receiverOptions = new ReceiverOptions
             {
-                TelegramId = "789055884",
-                Username = "CM9848",
-                FirstName = "Chidubem",
-                LastName = "Michael",
-                StartTime = DateTime.UtcNow
-            }; */
+                AllowedUpdates = new UpdateType[]
+                {
+                UpdateType.Message,
+                UpdateType.EditedMessage,
+                }
+            };
 
-        
-         //await telegramServ.SignUpUser(Addusers);
-
+        // Start receiving updates
+         _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions, cancellationToken: cts.Token);
     }
 
     private async Task ErrorHandler(ITelegramBotClient client, Exception exception, CancellationToken token)
@@ -197,7 +206,7 @@
                         FirstName = _firstName,
                         LastName = lastName
                     };
-
+                await telegramServ.SignUpUser(users);
                 StateHasChanged();
 
                 if (text.Equals("/start", StringComparison.OrdinalIgnoreCase))
