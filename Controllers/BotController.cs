@@ -45,10 +45,17 @@ namespace OMNIX_APP.Controllers
             var webhookUrl = "https://omnix-app.onrender.com/api/bot/start"; // Adjust this URL according to your deployment
             await _bot.SetWebhook(webhookUrl);
 
-            
         }
 
-        [HttpPost("start")]
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] Update update)
+        {
+            await UpdataeHandler(_bot, update, CancellationToken.None);
+            return Ok(); // Ensure this returns a 200 OK response
+        }
+
+
+        /*[HttpPost("start")]
         public async Task<IActionResult> Post([FromBody] Update update)
         {
             using var cts = new CancellationTokenSource();
@@ -63,7 +70,7 @@ namespace OMNIX_APP.Controllers
             // Start receiving updates
             _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions, cancellationToken: cts.Token);
             return Ok();
-        }
+        } */
 
         private async Task StartReceivingUpdates()
         {
@@ -145,5 +152,7 @@ namespace OMNIX_APP.Controllers
         }
     }
 }
+
+
 
 

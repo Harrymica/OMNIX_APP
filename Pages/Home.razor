@@ -4,6 +4,7 @@
 @inject ITelegramAuth telegramServ
 @inject ILocalStorageService lStorage
 @inject Tel_BotService botService
+@inject HttpClient http
 <PageTitle>Home</PageTitle>
 
 
@@ -37,7 +38,7 @@
 
                 <a href="/index">
 
-                    <button type="submit"
+                    <button type="submit" @onclick="Submit"
                             style="background-color:#C27406; width:120px  padding: 50px 50px"
                             class="w-120 h-120 rounded-full inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-primary-foreground h-11 rounded-md px-8 w-full bg-[#111325] hover:bg-[#111325]/90">
                     The OMNIX 200
@@ -48,41 +49,8 @@
                     Next airdrop in <span class="font-medium">@*  @NewTimeLeft.ToString("hh\\:mm\\:ss") *@ </span>
                 </div>
             </div>
-            @* <div class="bg-card rounded-lg p-6 w-full max-w-md flex flex-col gap-4">
-                <h2 class="text-lg font-medium">Airdrop History</h2>
-                <div class="grid gap-3">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-2">
-                            <div class="bg-muted rounded-full w-8 h-8 flex items-center justify-center text-sm">🪙</div>
-                            <div>
-                                <div class="font-medium">100 TOKENS</div>
-                                <div class="text-xs text-muted-foreground">June 1, 2023</div>
-                            </div>
-                        </div>
-                        <div class="bg-muted rounded-full px-2 py-1 text-xs font-medium">Claimed</div>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-2">
-                            <div class="bg-muted rounded-full w-8 h-8 flex items-center justify-center text-sm">🪙</div>
-                            <div>
-                                <div class="font-medium">50 TOKENS</div>
-                                <div class="text-xs text-muted-foreground">May 25, 2023</div>
-                            </div>
-                        </div>
-                        <div class="bg-muted rounded-full px-2 py-1 text-xs font-medium">Claimed</div>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-2">
-                            <div class="bg-muted rounded-full w-8 h-8 flex items-center justify-center text-sm">🪙</div>
-                            <div>
-                                <div class="font-medium">75 TOKENS</div>
-                                <div class="text-xs text-muted-foreground">May 19, 2023</div>
-                            </div>
-                        </div>
-                        <div class="bg-muted rounded-full px-2 py-1 text-xs font-medium">Claimed</div>
-                    </div>
-                </div>
-            </div> *@
+           
+           
         </main>
        
     </div>
@@ -125,28 +93,28 @@
                         }
             };
 
-            
+
         //var userId = await lStorage.GetItemAsStringAsync("userId");
         /* if (!string.IsNullOrWhiteSpace(Storedusername))
-            {
+        {
 
-            var result = await telegramServ.GetUser(userId);
+        var result = await telegramServ.GetUser(userId);
             if (result != null)
             {
-                FullName = $"{result.FirstName}, {result.LastName}";
-                _username = $"{result.username}";
-                StateHasChanged();
-            }
-            else
-            {
-            _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions, cancellationToken: cts.Token);
-            }
+            FullName = $"{result.FirstName}, {result.LastName}";
+            _username = $"{result.username}";
+        StateHasChanged();
         }
         else
         {
-
         _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions, cancellationToken: cts.Token);
-         } */
+    }
+    }
+    else
+    {
+
+    _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions, cancellationToken: cts.Token);
+        } */
         //_bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions, cancellationToken: cts.Token);
 
         // var me = await _bot.GetMeAsync();
@@ -156,10 +124,10 @@
 
         //cts.Cancel();
         // Start the bot in a separate task
-       // _ = Task.Run(() => StartReceivingUpdates());
+        // _ = Task.Run(() => StartReceivingUpdates());
 
 
-    
+
 
     }
 
@@ -182,7 +150,7 @@
         //         });
 
         // Start receiving updates
-         _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions, cancellationToken: cts.Token);
+        _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions, cancellationToken: cts.Token);
     }
 
     private async Task ErrorHandler(ITelegramBotClient client, Exception exception, CancellationToken token)
@@ -240,11 +208,36 @@
                 await telegramServ.SignUpUser(users);
                 StateHasChanged();
 
-                
+
 
 
             }
         }
+    }
+
+
+    public async Task Submit()
+    {
+        //await http.PostAsync("https://localhost:7074", );
+
+        // Create an instance of Update with the necessary data
+        var update = new Update
+            {
+                // Populate the Update object as needed
+                // For example:
+                Message = new Message
+                {
+                    Text = "/start",
+                    Chat = new Chat
+                    {
+                        Id = 12345678 // Replace with actual chat ID
+                    }
+                }
+            };
+
+            var serilize = JsonConvert.SerializeObject(update);
+        // Send the POST request to your API
+        var response = await http.PostAsJsonAsync("https://localhost:7074/api/bot/", serilize);
     }
 
 }
