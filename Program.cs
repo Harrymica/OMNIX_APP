@@ -51,7 +51,7 @@ namespace OMNIX_APP
 
             app.UseRouting();
 
-           // app.MapControllers(); // Map the controllers
+            app.MapControllers(); // Map the controllers
             app.MapBlazorHub();
             app.MapFallbackToPage("/_Host");
 
