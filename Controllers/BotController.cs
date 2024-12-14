@@ -46,7 +46,7 @@ namespace OMNIX_APP.Controllers
                 UpdateType.EditedMessage,
                     }
             };
-            await _bot.SetWebhook("https://omnix-app.onrender.com/bot", allowedUpdates: new UpdateType[]
+            await _bot.SetWebhook("https://omnix-app.onrender.com/api/bot", allowedUpdates: new UpdateType[]
                     {
                 UpdateType.Message,
                 UpdateType.EditedMessage,
