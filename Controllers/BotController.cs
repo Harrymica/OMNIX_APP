@@ -42,13 +42,13 @@ namespace OMNIX_APP.Controllers
 
         private async Task SetWebhook()
         {
-            var webhookUrl = "https://omnix-app.onrender.com/bot"; // Adjust this URL according to your deployment
+            var webhookUrl = "https://omnix-app.onrender.com/api/bot/start"; // Adjust this URL according to your deployment
             await _bot.SetWebhook(webhookUrl);
 
             
         }
 
-        [HttpPost]
+        [HttpPost("start")]
         public async Task<IActionResult> Post([FromBody] JObject update)
         {
             using var cts = new CancellationTokenSource();
