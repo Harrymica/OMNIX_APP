@@ -28,13 +28,41 @@ namespace OMNIX_APP.Controllers
             _botToken = _configuration["Telegram:BotToken"];
 
             // Set the webhook when the bot is initialized
-            StartReceivingUpdates().GetAwaiter().GetResult();
+           // StartReceivingUpdates().GetAwaiter().GetResult();
+
+            SetWebhook().GetAwaiter().GetResult();
+        }
+
+        /*[HttpPost]
+        public async Task<IActionResult> Post([FromBody] JObject update)
+        {
+            await StartReceivingUpdates();
+            return Ok();
+        }*/
+
+        private async Task SetWebhook()
+        {
+            var webhookUrl = "https://omnix-app.onrender.com/api/bot"; // Adjust this URL according to your deployment
+            await _bot.SetWebhook(webhookUrl);
+
+            using var cts = new CancellationTokenSource();
+            var receiverOptions = new ReceiverOptions
+            {
+                AllowedUpdates = new UpdateType[]
+                    {
+                UpdateType.Message,
+                UpdateType.EditedMessage,
+                    }
+            };
+            // Start receiving updates
+            _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions, cancellationToken: cts.Token);
         }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] JObject update)
         {
-            await StartReceivingUpdates();
+            // Process incoming updates here
+            await UpdataeHandler(_bot, update.ToObject<Update>(), CancellationToken.None);
             return Ok();
         }
 
