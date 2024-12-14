@@ -49,7 +49,7 @@ namespace OMNIX_APP.Controllers
         }
 
         [HttpPost("start")]
-        public async Task<IActionResult> Post([FromBody] JObject update)
+        public async Task<IActionResult> Post([FromBody] Update update)
         {
             using var cts = new CancellationTokenSource();
             var receiverOptions = new ReceiverOptions
