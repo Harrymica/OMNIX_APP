@@ -26,9 +26,12 @@ namespace OMNIX_APP.Controllers
             _telegramServ = telegramServ;
             // Access the BotToken from appsettings.json
             _botToken = _configuration["Telegram:BotToken"];
+
+            // Set the webhook when the bot is initialized
+            StartReceivingUpdates().GetAwaiter().GetResult();
         }
 
-        [HttpPost("/start")]
+        [HttpPost("start")]
         public async Task<IActionResult> Post([FromBody] JObject update)
         {
             await StartReceivingUpdates();
@@ -46,11 +49,12 @@ namespace OMNIX_APP.Controllers
                 UpdateType.EditedMessage,
                     }
             };
-            await _bot.SetWebhook("https://omnix-app.onrender.com/api/bot/start", allowedUpdates: new UpdateType[]
+            await _bot.SetWebhook("https://omnix-app.onrender.com/api/bot/start");
+            /*, allowedUpdates: new UpdateType[]
                     {
                 UpdateType.Message,
                 UpdateType.EditedMessage,
-                    });
+                    }*/
 
             // Start receiving updates
             _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions, cancellationToken: cts.Token);
