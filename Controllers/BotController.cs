@@ -45,6 +45,12 @@ namespace OMNIX_APP.Controllers
             var webhookUrl = "https://omnix-app.onrender.com/bot"; // Adjust this URL according to your deployment
             await _bot.SetWebhook(webhookUrl);
 
+            
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] JObject update)
+        {
             using var cts = new CancellationTokenSource();
             var receiverOptions = new ReceiverOptions
             {
@@ -56,13 +62,6 @@ namespace OMNIX_APP.Controllers
             };
             // Start receiving updates
             _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions, cancellationToken: cts.Token);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] JObject update)
-        {
-            // Process incoming updates here
-            await UpdataeHandler(_bot, update.ToObject<Update>(), CancellationToken.None);
             return Ok();
         }
 
