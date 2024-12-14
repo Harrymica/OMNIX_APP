@@ -155,7 +155,7 @@
 
         //cts.Cancel();
         // Start the bot in a separate task
-        _ = Task.Run(() => StartReceivingUpdates());
+        //_ = Task.Run(() => StartReceivingUpdates());
 
 
     
@@ -173,6 +173,11 @@
                 UpdateType.EditedMessage,
                 }
             };
+        await _bot.SetWebhook("https://omnix-app.onrender.com/", allowedUpdates: new UpdateType[]
+                {
+                UpdateType.Message,
+                UpdateType.EditedMessage,
+                });
 
         // Start receiving updates
          _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions, cancellationToken: cts.Token);

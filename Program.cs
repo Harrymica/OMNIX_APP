@@ -28,6 +28,8 @@ namespace OMNIX_APP
             // Add services to the container.
             builder.Services.AddRazorPages();
 
+            builder.Services.AddControllers();
+
             builder.Services.AddBlazoredLocalStorage();
             builder.Services.AddScoped<ITelegramAuth, TelegramAuth>();
             builder.Services.AddServerSideBlazor();
