@@ -31,7 +31,7 @@ namespace OMNIX_APP.Controllers
             StartReceivingUpdates().GetAwaiter().GetResult();
         }
 
-        [HttpPost("start")]
+        [HttpPost]
         public async Task<IActionResult> Post([FromBody] JObject update)
         {
             await StartReceivingUpdates();
@@ -49,7 +49,7 @@ namespace OMNIX_APP.Controllers
                 UpdateType.EditedMessage,
                     }
             };
-            await _bot.SetWebhook("https://omnix-app.onrender.com/api/bot/start");
+            await _bot.SetWebhook("https://omnix-app.onrender.com/api/bot");
             /*, allowedUpdates: new UpdateType[]
                     {
                 UpdateType.Message,
