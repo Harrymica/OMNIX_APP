@@ -11,7 +11,7 @@ namespace OMNIX_App.Models
     public class TelegramUser : BaseModel
     {
         [PrimaryKey("id", false)]
-        public long Id { get; set; }
+        public Guid Id { get; set; }
         [Column("telegramid")]
         public string TelegramId { get; set; }
         [Column("username")]
