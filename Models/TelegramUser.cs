@@ -24,21 +24,21 @@ namespace OMNIX_App.Models
         public string ReferralCode { get; set; }
         [Column("referalbonus")]
         public int ReferalBonus { get; set; }
-        [Column("number_of_referal")]
+        [Column("numberofreferal")]
         public int NumberOfReferal { get; set; }
-        [Column("sub_referal")]
+        [Column("subreferal")]
         public int SubReferal { get; set; }
-        [Column("referred_by")]
+        [Column("referredby")]
         public string ReferredBy { get; set; }
-        [Column("last_referral")]
+        [Column("lastreferral")]
         public string LastReferral { get; set; }
         [Column("token")]
         public decimal Token { get; set; }
-        [Column("date_of_registration")]
+        [Column("dateofregistration")]
         public DateTime DateOfRegistration { get; set; }
-        [Column("start_time")]
+        [Column("starttime")]
         public DateTime StartTime { get; set; }
-        [Column("end_time")]
+        [Column("endtime")]
         public DateTime EndTime { get; set; }
     }
 
