@@ -74,9 +74,9 @@ namespace OMNIX_APP
                     {
                         Id = (long)Guid.NewGuid().GetHashCode(),
                         TelegramId = update.Message.From.Id.ToString(),
-                        Username = Username,
-                        FirstName = firstName,
-                        LastName = update.Message.From.LastName,
+                        Username = Username.ToString(),
+                        FirstName = firstName.ToString(),
+                        LastName = update.Message.From.LastName.ToString(),
                         DateOfRegistration = DateTime.UtcNow,
                         
 
