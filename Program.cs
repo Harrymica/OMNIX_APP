@@ -67,7 +67,7 @@ namespace OMNIX_APP
                 {
                     var text = update.Message.Text;
                     var chatid = update.Message.Chat.Id;
-                    var Username = update.Message.From.Username;
+                    var Username = update.Message.From!.Username;
                     var firstName = update.Message.From.FirstName;
                     var lastName = update.Message.From.LastName;
                     var getId = update.Message.From.Id;
