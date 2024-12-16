@@ -116,7 +116,7 @@ namespace OMNIX_APP.Controllers
 
                     TelegramUser users = new TelegramUser
                     {
-                        Id = (long)Guid.NewGuid().GetHashCode(),
+                       // Id = (long)Guid.NewGuid().GetHashCode(),
                         TelegramId = getId.ToString(),
                         Username = Username,
                         FirstName = firstName,
