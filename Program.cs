@@ -91,7 +91,6 @@ namespace OMNIX_APP
                         
 
                         };
-                    }
 
                     if (text.Equals("/start", StringComparison.OrdinalIgnoreCase))
                     {
@@ -103,7 +102,7 @@ namespace OMNIX_APP
 
                         await client.SendTextMessageAsync(
                             chatId: chatid,
-                            text: $"Welcome {firstName}! Click the button below to start mining, {firstName}",
+                            text: $"Welcome {user.FirstName}! Click the button below to start mining, {user.FirstName}",
                             replyMarkup: inlineKeyboard);
                     }
                     else
@@ -114,8 +113,9 @@ namespace OMNIX_APP
                             text: $"This is what you said: {text}");
                     }
 
-                    Console.WriteLine($"{Username} | {chatid} | {text}, {firstName}");
+                    Console.WriteLine($"{user.userName} | {chatid} | {text}, {user.FirstName}");
                     await telegramServ.SignUpUser(users);
+                    }
                 }
             }
 
