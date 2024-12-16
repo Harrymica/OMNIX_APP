@@ -16,13 +16,13 @@ namespace OMNIX_App.Models
         public string TelegramId { get; set; }
         [Column("username")]
         public string Username { get; set; }
-        [Column("first_name")]
+        [Column("firstname")]
         public string FirstName { get; set; }
-        [Column("last_name")]
+        [Column("lastname")]
         public string LastName { get; set; }
-        [Column("referral_code")]
+        [Column("referralcode")]
         public string ReferralCode { get; set; }
-        [Column("referal_bonus")]
+        [Column("referalbonus")]
         public int ReferalBonus { get; set; }
         [Column("number_of_referal")]
         public int NumberOfReferal { get; set; }
