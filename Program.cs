@@ -40,7 +40,7 @@ namespace OMNIX_APP
             var app = builder.Build();
 
             TelegramBotClient botClient = new TelegramBotClient("7324366764:AAE0FiQdBDSnHgZvnv2ZU3f5f9DAiGIMhx8");
-
+        
 
             SetWebhook(botClient).GetAwaiter().GetResult();
 
@@ -63,25 +63,35 @@ namespace OMNIX_APP
             // Define the update handler method
             async Task UpdataeHandler(TelegramBotClient client, Update update, ITelegramAuth telegramServ)
             {
+                
                 if (update.Type == UpdateType.Message && update.Message.Type == MessageType.Text)
                 {
                     var text = update.Message.Text;
                     var chatid = update.Message.Chat.Id;
-                    var Username = update.Message.From!.Username;
-                    var firstName = update.Message.From.FirstName;
-                   // var lastName = update.Message.From.LastName;
-                    //var getId = update.Message.From.Id;
-                    TelegramUser users = new TelegramUser
+
+                    UserModel user = new UserModel
                     {
-                        Id = (long)Guid.NewGuid().GetHashCode(),
-                        TelegramId = update.Message.From.Id.ToString(),//getId.ToString(),
-                        Username = Username,
-                        FirstName = firstName,
+                        userName = update.Message.From!.Username,
+                        TelegramId = update.Message.From.Id.ToString(),
+                        FirstName = update.Message.From.FirstName,
                         LastName = update.Message.From.LastName,
-                        DateOfRegistration = DateTime.UtcNow,
+                    };
+                   
+                    if(user != null)
+                    {
+
+                        TelegramUser users = new TelegramUser
+                        {
+                            Id = (long)Guid.NewGuid().GetHashCode(),
+                            TelegramId = update.Message.From.Id.ToString(),//getId.ToString(),
+                            Username = user.userName,
+                            FirstName = user.FirstName,
+                            LastName = user.LastName,
+                            DateOfRegistration = DateTime.UtcNow,
                         
 
-                    };
+                        };
+                    }
 
                     if (text.Equals("/start", StringComparison.OrdinalIgnoreCase))
                     {
@@ -93,7 +103,7 @@ namespace OMNIX_APP
 
                         await client.SendTextMessageAsync(
                             chatId: chatid,
-                            text: $"Welcome! Click the button below to start mining, {firstName}",
+                            text: $"Welcome {firstName}! Click the button below to start mining, {firstName}",
                             replyMarkup: inlineKeyboard);
                     }
                     else
