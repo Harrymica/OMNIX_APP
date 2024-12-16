@@ -95,14 +95,28 @@
     {
         if (firstRender)
         {
-            //Storedusername = await lStorage.GetItemAsStringAsync("username");
-            StateHasChanged();
+            await StartReceivingUpdates();
+
+            var userId = await lStorage.GetItemAsStringAsync("telegramId");
+            if (!string.IsNullOrWhiteSpace(userId))
+            {
+
+                var result = await telegramServ.GetUser(userId);
+                if (result != null)
+                {
+                    FullName = $"{result.FirstName}, {result.LastName}";
+                    _username = $"{result.Username}";
+                    _userId = result.TelegramId;
+                    StateHasChanged();
+                }
+
+            }
         }
     }
 
     protected override async Task OnInitializedAsync()
     {
-        using var cts = new CancellationTokenSource();
+        /*using var cts = new CancellationTokenSource();
         var receiverOptions = new ReceiverOptions
             {
                 AllowedUpdates = new UpdateType[]
@@ -110,23 +124,9 @@
                     UpdateType.Message,
                     UpdateType.EditedMessage,
                         }
-            };
+            };*/
 
-
-        var userId = await lStorage.GetItemAsStringAsync("telegramId");
-        if (!string.IsNullOrWhiteSpace(userId))
-        {
-
-            var result = await telegramServ.GetUser(userId);
-            if (result != null)
-            {
-                FullName = $"{result.FirstName}, {result.LastName}";
-                _username = $"{result.Username}";
-                _userId = result.TelegramId;
-                StateHasChanged();
-             }
         
-        }
         
         
 
@@ -146,12 +146,7 @@
                 UpdateType.EditedMessage,
                 }
             };
-        //await _bot.SetWebhook("https://omnix-app.onrender.com/api/bot/start");
-        // await _bot.SetWebhook("https://omnix-app.onrender.com/", allowedUpdates: new UpdateType[]
-        //         {
-        //         UpdateType.Message,
-        //         UpdateType.EditedMessage,
-        //         });
+       
 
         // Start receiving updates
         _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions, cancellationToken: cts.Token);
@@ -185,6 +180,7 @@
                         FirstName = _firstName,
                         LastName = lastName
                     };
+                await lStorage.SetItemAsStringAsync(getId.ToString(), "telegramId");
 
                 if (text.Equals("/start", StringComparison.OrdinalIgnoreCase))
                 {
