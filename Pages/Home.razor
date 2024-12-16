@@ -8,7 +8,30 @@
 <PageTitle>Home</PageTitle>
 
 
+<div class="container">
+    <h1 class="title">Phoenix</h1>
+    
+    <div class="logo-container">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="phoenix-logo">
+            <path d="M12 2L2 12h3l7-7 7 7h3L12 2z" />
+            <path d="M12 22v-8" />
+            <path d="M12 14l-2.5 2.5" />
+            <path d="M12 14l2.5 2.5" />
+            <path class="animated-path" d="M12 14v4" />
+        </svg>
+    </div>
 
+    <div class="grid">
+        <MiningStatus />
+        <Rewards />
+    </div>
+</div>
+
+@code {
+    // Index page code (if needed)
+}
+
+@* 
 <div class="container" style="color:darkslateblue">
 
     <div class="flex flex-col h-screen bg-background text-foreground" >
@@ -19,18 +42,13 @@
             </div>
             <div class="bg-card rounded-lg p-6 w-full max-w-md flex flex-col items-center gap-4">
                 <div class="bg-muted rounded-full w-20 h-20 flex items-center justify-center text-4xl">
-                   @* <img src="/images/dakcoin.jpg" /> *@
+                   
                    
                     <div class="loader">
                         
                         <span>  @_firstName  </span>
                     </div>
-                  @*
-                    @_username, @FullName
-                    
-                  *@
-
-                   @*  @_user.FirstName 🪙 *@
+                  
                 </div>
                 <div class="text-4xl font-bol text-center">
                     1,235 <span class="text-muted-foreground text-2xl">TOKENS</span>
@@ -46,7 +64,7 @@
                 </a>
 
                <div class="text-muted-foreground text-sm ">
-                    Next airdrop in <span class="font-medium">@*  @NewTimeLeft.ToString("hh\\:mm\\:ss") *@ </span>
+                    Next airdrop in <span class="font-medium">@*  @NewTimeLeft.ToString("hh\\:mm\\:ss")  </span>
                 </div>
             </div>
            
@@ -54,7 +72,8 @@
         </main>
        
     </div>
-</div>
+</div> *@
+@* <img src="/images/dakcoin.jpg" /> *@
 
 
 

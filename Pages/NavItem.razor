@@ -1,0 +1,19 @@
+﻿@using Microsoft.AspNetCore.Components.Routing
+
+<li class="nav-item">
+    <NavLink class="nav-link" href="@Href">
+        <span class="@($"icon-{Icon}")"></span>
+        <span class="nav-text">@Text</span>
+    </NavLink>
+</li>
+
+@code {
+    [Parameter]
+    public string Href { get; set; }
+
+    [Parameter]
+    public string Icon { get; set; }
+
+    [Parameter]
+    public string Text { get; set; }
+}

@@ -1,0 +1,39 @@
+﻿@using System.Timers
+
+<div class="status-card">
+    <h2 class="card-title">Mining Status</h2>
+    <div class="status-content">
+        <div>
+            <p class="status-label">Status:</p>
+            <p class="status-value status-active">@_MiningStatus</p>
+        </div>
+        <div>
+            <p class="status-label">Hash Rate:</p>
+            <p class="status-value hash-rate">@HashRate.ToString("F2") H/s</p>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string _MiningStatus { get; set; } = "Active";
+    private double HashRate { get; set; } = 0;
+    private Timer timer;
+
+    protected override void OnInitialized()
+    {
+        timer = new Timer(1000);
+        timer.Elapsed += UpdateHashRate;
+        timer.Start();
+    }
+
+    private void UpdateHashRate(object sender, ElapsedEventArgs e)
+    {
+        HashRate += new Random().NextDouble() * 10;
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        timer?.Dispose();
+    }
+}

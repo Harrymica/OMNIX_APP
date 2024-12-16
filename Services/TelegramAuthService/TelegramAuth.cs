@@ -1,4 +1,5 @@
-﻿using OMNIX_App.Models;
+﻿using Blazored.LocalStorage;
+using OMNIX_App.Models;
 using OMNIX_App.Services.TelegramAuthService;
 using Polly;
 using Supabase.Interfaces;
@@ -7,7 +8,12 @@ namespace OMNIX_APP.Services.TelegramAuthService
 {
     public class TelegramAuth : ITelegramAuth
     {
-        
+        private readonly ILocalStorageService _lStorage;
+
+        public TelegramAuth(ILocalStorageService lStorage)
+        {
+            _lStorage = lStorage;
+        }
         public async Task<TelegramUser> SignInUser(TelegramUser user)
         {
             var existingUser = await GetUser(user.TelegramId);
@@ -38,8 +44,9 @@ namespace OMNIX_APP.Services.TelegramAuthService
             }
             else
             {
-            var insertedUser = await supabase.From<TelegramUser>().Insert(user);//.ExecuteAsync();
-              return insertedUser.Model;//.Data;
+               var insertedUser = await supabase.From<TelegramUser>().Insert(user);//.ExecuteAsync();
+               await  _lStorage.SetItemAsStringAsync(insertedUser.Model.TelegramId, "telegramId");
+               return insertedUser.Model;//.Data;
 
             }
 

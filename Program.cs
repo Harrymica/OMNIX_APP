@@ -56,7 +56,7 @@ namespace OMNIX_APP
             // Define the webhook setting method
             async Task SetWebhook(TelegramBotClient bot)
             {
-                var webhookUrl = "https://omnix-app.onrender.com/api/bot/start"; // Adjust this URL according to your deployment
+                var webhookUrl = "https://omnix-app.onrender.com/api/bot"; // Adjust this URL according to your deployment
                 await bot.SetWebhookAsync(webhookUrl);
             }
 
@@ -76,7 +76,10 @@ namespace OMNIX_APP
                         TelegramId = update.Message.From.Id.ToString(),
                         Username = Username,
                         FirstName = firstName,
-                        LastName = update.Message.From.LastName
+                        LastName = update.Message.From.LastName,
+                        DateOfRegistration = DateTime.UtcNow,
+                        
+
                     };
 
                     if (text.Equals("/start", StringComparison.OrdinalIgnoreCase))
@@ -84,8 +87,8 @@ namespace OMNIX_APP
                         // Create an inline keyboard button that redirects to your website
                         var inlineKeyboard = new InlineKeyboardMarkup(new[]
                         {
-                InlineKeyboardButton.WithUrl("Visit Our Website", "https://omnix-app.onrender.com/")
-            });
+                        InlineKeyboardButton.WithUrl("Visit Our Website", "https://omnix-app.onrender.com/")
+                        });
 
                         await client.SendTextMessageAsync(
                             chatId: chatid,
