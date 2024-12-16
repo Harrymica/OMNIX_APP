@@ -114,7 +114,7 @@
 
 
         var userId = await lStorage.GetItemAsStringAsync("telegramId");
-        if (!string.IsNullOrWhiteSpace(Storedusername))
+        if (!string.IsNullOrWhiteSpace(userId))
         {
 
             var result = await telegramServ.GetUser(userId);
