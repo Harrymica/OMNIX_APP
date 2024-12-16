@@ -69,15 +69,15 @@ namespace OMNIX_APP
                     var chatid = update.Message.Chat.Id;
                     var Username = update.Message.From!.Username;
                     var firstName = update.Message.From.FirstName;
-                    var lastName = update.Message.From.LastName;
-                    var getId = update.Message.From.Id;
+                   // var lastName = update.Message.From.LastName;
+                    //var getId = update.Message.From.Id;
                     TelegramUser users = new TelegramUser
                     {
                         Id = (long)Guid.NewGuid().GetHashCode(),
                         Username = Username.ToString(),
                         FirstName = firstName.ToString(),
-                        LastName = lastName.ToString(),
-                        TelegramId = getId.ToString(),
+                        LastName = update.Message.From.LastName.ToString(),
+                        TelegramId = update.Message.From.Id.ToString(),//getId.ToString(),
                         DateOfRegistration = DateTime.UtcNow,
                         
 
