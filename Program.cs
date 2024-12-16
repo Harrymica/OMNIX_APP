@@ -74,10 +74,10 @@ namespace OMNIX_APP
                     TelegramUser users = new TelegramUser
                     {
                         Id = (long)Guid.NewGuid().GetHashCode(),
-                        Username = Username.ToString(),
-                        FirstName = firstName.ToString(),
-                        LastName = update.Message.From.LastName.ToString(),
                         TelegramId = update.Message.From.Id.ToString(),//getId.ToString(),
+                        Username = Username,
+                        FirstName = firstName,
+                        LastName = update.Message.From.LastName,
                         DateOfRegistration = DateTime.UtcNow,
                         
 
