@@ -9,7 +9,7 @@
 
 
 <div class="container">
-    <h1 class="title">Phoenix</h1>
+    <h1 class="title">Phoenix  @_userId</h1>
     
     <div class="logo-container">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="phoenix-logo">
@@ -83,7 +83,7 @@
     private string Storedusername;
     private string FullName;
 
-    private long _userId;
+    private string _userId;
     private string _firstName;
 
 
@@ -113,37 +113,22 @@
             };
 
 
-        //var userId = await lStorage.GetItemAsStringAsync("userId");
-        /* if (!string.IsNullOrWhiteSpace(Storedusername))
+        var userId = await lStorage.GetItemAsStringAsync("telegramId");
+        if (!string.IsNullOrWhiteSpace(Storedusername))
         {
 
-        var result = await telegramServ.GetUser(userId);
+            var result = await telegramServ.GetUser(userId);
             if (result != null)
             {
-            FullName = $"{result.FirstName}, {result.LastName}";
-            _username = $"{result.username}";
-        StateHasChanged();
+                FullName = $"{result.FirstName}, {result.LastName}";
+                _username = $"{result.Username}";
+                _userId = result.TelegramId;
+                StateHasChanged();
+             }
+        
         }
-        else
-        {
-        _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions, cancellationToken: cts.Token);
-    }
-    }
-    else
-    {
-
-    _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions, cancellationToken: cts.Token);
-        } */
-        //_bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions, cancellationToken: cts.Token);
-
-        // var me = await _bot.GetMeAsync();
-
-        // Console.WriteLine($"Start listening for @{me.Username}, {_firstName}");
-        //  Console.ReadLine();
-
-        //cts.Cancel();
-        // Start the bot in a separate task
-        // _ = Task.Run(() => StartReceivingUpdates());
+        
+        
 
 
 
