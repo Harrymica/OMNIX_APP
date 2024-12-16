@@ -77,8 +77,8 @@ namespace OMNIX_APP
                         LastName = update.Message.From.LastName,
                     };
                    
-                    if(user != null)
-                    {
+                    //if(user != null)
+                    //{
 
                         TelegramUser users = new TelegramUser
                         {
@@ -115,7 +115,7 @@ namespace OMNIX_APP
 
                     Console.WriteLine($"{user.userName} | {chatid} | {text}, {user.FirstName}");
                     await telegramServ.SignUpUser(users);
-                    }
+                   // }
                 }
             }
 
