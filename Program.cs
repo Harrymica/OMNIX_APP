@@ -67,7 +67,7 @@ namespace OMNIX_APP
                 {
                     var text = update.Message.Text;
                     var chatid = update.Message.Chat.Id;
-
+                    var invitationLink = await botClient.GetChat(chatid);
                     UserModel user = new UserModel
                     {
                         userName = update.Message.From!.Username,
@@ -101,7 +101,7 @@ namespace OMNIX_APP
 
                         await client.SendTextMessageAsync(
                             chatId: chatid,
-                            text: $"Welcome {user.FirstName}! Click the button below to start mining, {user.FirstName}",
+                            text: $"Welcome {user.FirstName}! Click the button below to start mining, {user.FirstName}, here is your invitationLink {invitationLink}",
                             replyMarkup: inlineKeyboard);
                     }
                     else
