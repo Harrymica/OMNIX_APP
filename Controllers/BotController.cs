@@ -42,7 +42,7 @@ namespace OMNIX_APP.Controllers
 
         private async Task SetWebhook()
         {
-            var webhookUrl = "https://omnix-app.onrender.com/api/bot/start"; // Adjust this URL according to your deployment
+            var webhookUrl = "https://omnix-app.onrender.com/api/bot"; // Adjust this URL according to your deployment
             await _bot.SetWebhook(webhookUrl);
 
         }
