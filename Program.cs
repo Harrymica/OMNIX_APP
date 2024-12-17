@@ -101,13 +101,13 @@ namespace OMNIX_APP
 
                         await client.SendTextMessageAsync(
                             chatId: chatid,
-                            text: $"Welcome {user.FirstName}! Click the button below to start mining, {user.FirstName}, here is your invitationLink {invitationLink}",
+                            text: $"Welcome {user.FirstName}! Click the button below to start mining, {user.FirstName}",
                             replyMarkup: inlineKeyboard);
                     }
                     else
                     {
                         // Reply back to the user with their message prefixed
-                        await client.SendTextMessageAsync(chatId: chatid,text: $"This is what you said: {text}");
+                        await client.SendTextMessageAsync(chatId: chatid,text: $"This is what you said: {text}, here is your invitationLink {invitationLink}");
                     }
 
                     Console.WriteLine($"{user.userName} | {chatid} | {text}, {user.FirstName}");
