@@ -38,7 +38,7 @@ namespace OMNIX_APP
             builder.Services.AddSingleton<WeatherForecastService>();
             builder.Services.AddSingleton<Tel_BotService>();
             var app = builder.Build();
-
+          /*
             TelegramBotClient botClient = new TelegramBotClient("7324366764:AAE0FiQdBDSnHgZvnv2ZU3f5f9DAiGIMhx8");
         
 
@@ -118,7 +118,7 @@ namespace OMNIX_APP
                    // }
                 }
             }
-
+          */
 
 
             // Configure the HTTP request pipeline.
