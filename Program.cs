@@ -73,8 +73,8 @@ namespace OMNIX_APP
                     {
                         userName = update.Message.From!.Username,
                         TelegramId = update.Message.From.Id.ToString(),
-                        FirstName = update.Message.From.FirstName,
-                        LastName = update.Message.From.LastName,
+                        FirstName = update.Message.Chat.FirstName,
+                        LastName = update.Message.Chat.LastName,
                     };
                    
                     //if(user != null)
@@ -108,13 +108,13 @@ namespace OMNIX_APP
                     else
                     {
                         // Reply back to the user with their message prefixed
-                        await client.SendTextMessageAsync(
-                            chatId: chatid,
-                            text: $"This is what you said: {text}");
+                        await client.SendTextMessageAsync(chatId: chatid,text: $"This is what you said: {text}");
                     }
 
                     Console.WriteLine($"{user.userName} | {chatid} | {text}, {user.FirstName}");
+                    
                     await telegramServ.SignUpUser(users);
+                   
                    // }
                 }
             }
