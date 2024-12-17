@@ -5,7 +5,6 @@
 @inject ILocalStorageService lStorage
 @inject Tel_BotService botService
 @inject HttpClient http
-@using System.Timers
 <PageTitle>Home</PageTitle>
 
 
@@ -23,20 +22,7 @@
     </div>
 
     <div class="grid">
-       @*  <MiningStatus /> *@
-        <div class="status-card">
-            <h2 class="card-title">Mining Status</h2>
-            <div class="status-content">
-                <div>
-                    <p class="status-label">Status:</p>
-                    <p class="status-value status-active">@_MiningStatus</p>
-                </div>
-                <div>
-                    <p class="status-label">Hash Rate:</p>
-                    <p class="status-value hash-rate">@HashRate.ToString("F2") H/s</p>
-                </div>
-            </div>
-        </div>
+        <MiningStatus />
         <Rewards />
     </div>
 </div>
@@ -104,27 +90,6 @@
     private TelegramUser _user = new TelegramUser();
     private TelegramBotClient _bot = new TelegramBotClient("7324366764:AAE0FiQdBDSnHgZvnv2ZU3f5f9DAiGIMhx8");
 
-    private string _MiningStatus { get; set; } = "Active";
-    private double HashRate { get; set; } = 0;
-    private Timer timer;
-
-    protected override void OnInitialized()
-    {
-        timer = new Timer(1000);
-        timer.Elapsed += UpdateHashRate;
-        timer.Start();
-    }
-
-    private void UpdateHashRate(object sender, ElapsedEventArgs e)
-    {
-        HashRate += new Random().NextDouble() * 10;
-        InvokeAsync(StateHasChanged);
-    }
-
-    public void Dispose()
-    {
-        timer?.Dispose();
-    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

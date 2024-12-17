@@ -1,4 +1,5 @@
-﻿@inherits LayoutComponentBase
+﻿@using OMNIX_APP.Pages
+@inherits LayoutComponentBase
 @* @using System.Timers *@
 
 <div class="Page">
@@ -10,11 +11,11 @@
         @* </article> *@
         </div>
 
-        <OMNIX_APP.Pages.BottomNavbar />
        
 </main>
+       @*  <BottomNavbar /> *@
 
-    @* <div class="tabs" style="background:#000000">
+     <div class="tabs" style="background:#000000">
         <nav class="bg-card border-t px-4 py-2 flex justify-between items-center">
 
             <a href="/">
@@ -97,7 +98,7 @@
                 </button>
             </a>
         </nav>
-    </div> *@
+    </div> 
 </div>
 
 <div id="blazor-error-ui">
