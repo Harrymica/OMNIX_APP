@@ -90,15 +90,15 @@
     {
         if (firstRender)
         {
-            await StartReceivingUpdates();
-
-            //await Task.Delay(2000);
+            
         }
     }
 
     protected override async Task OnInitializedAsync()
     {
-        
+        await StartReceivingUpdates();
+
+        await Task.Delay(2000);
         _timer = new Timer(1000);
         _timer.Elapsed += TimerElapsed;
         _timer.Start();
