@@ -122,6 +122,7 @@
 
         // Start receiving updates
         _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions, cancellationToken: cts.Token);
+       
     }
 
     private async Task ErrorHandler(ITelegramBotClient client, Exception exception, CancellationToken token)
