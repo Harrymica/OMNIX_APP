@@ -119,7 +119,7 @@
     {
         if (firstRender)
         {
-            await StartReceivingUpdates();
+            //await StartReceivingUpdates();
 
             var userId = await lStorage.GetItemAsStringAsync("telegramId");
             if (!string.IsNullOrWhiteSpace(userId))
