@@ -97,7 +97,7 @@
     protected override async Task OnInitializedAsync()
     {
         //await StartReceivingUpdates();
-        await Task.Run(StartReceivingUpdates);
+        _ = Task.Run(StartReceivingUpdates); // Fire and forget
 
 
 
@@ -119,6 +119,12 @@
 
         // Start receiving updates
         _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions, cancellationToken: cts.Token);
+        var me = await _bot.GetMeAsync();
+
+        Console.WriteLine($"Start listening for @{me.Username}");
+       
+
+        cts.Cancel(); // Stop the bot
 
     }
 
@@ -174,7 +180,7 @@
                         text: $"This is what you said: {text}",
                         cancellationToken: token);
                 }*/
-
+                Console.WriteLine($"{Username} |{chatid} | {text}, {_firstName}");
                 var response =  telegramServ.SignUpUser(users);
                 if(response.IsCompletedSuccessfully)
                 {
