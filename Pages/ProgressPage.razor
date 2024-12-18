@@ -99,10 +99,7 @@
         //await StartReceivingUpdates();
         await Task.Run(StartReceivingUpdates);
 
-        await Task.Delay(2000);
-        _timer = new Timer(1000);
-        _timer.Elapsed += TimerElapsed;
-        _timer.Start();
+
 
     }
 
@@ -122,7 +119,7 @@
 
         // Start receiving updates
         _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions, cancellationToken: cts.Token);
-       
+
     }
 
     private async Task ErrorHandler(ITelegramBotClient client, Exception exception, CancellationToken token)
@@ -156,29 +153,36 @@
                 await lStorage.SetItemAsStringAsync(getId.ToString(), "telegramId");
 
                 /*if (text.Equals("/start", StringComparison.OrdinalIgnoreCase))
-                {
+                    {
                     // Create an inline keyboard button that redirects to your website
                     var inlineKeyboard = new InlineKeyboardMarkup(new[]
                     {
                     InlineKeyboardButton.WithUrl("Visit Our Website", "https://omnix-app.onrender.com/")
-                });
+                    });
 
-                    await _bot.SendTextMessageAsync(
+                        await _bot.SendTextMessageAsync(
                         chatId: chatid,
                         text: $"Welcome! Click the button below to start mining, {_firstName}",
                         replyMarkup: inlineKeyboard,
                         cancellationToken: token);
                 }
                 else
-                {
+                    {
                     // Reply back to the user with their message prefixed
                     await _bot.SendTextMessageAsync(
                         chatId: chatid,
                         text: $"This is what you said: {text}",
                         cancellationToken: token);
                 }*/
-               
-                await telegramServ.SignUpUser(users);
+
+                var response =  telegramServ.SignUpUser(users);
+                if(response.IsCompletedSuccessfully)
+                {
+                    await Task.Delay(2000);
+                    _timer = new Timer(1000);
+                    _timer.Elapsed += TimerElapsed;
+                    _timer.Start();
+                }
                 StateHasChanged();
 
 

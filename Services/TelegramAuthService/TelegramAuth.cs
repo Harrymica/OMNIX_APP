@@ -9,19 +9,19 @@ namespace OMNIX_APP.Services.TelegramAuthService
     public class TelegramAuth : ITelegramAuth
     {
         
-        public async Task<TelegramUser> SignInUser(TelegramUser user)
+        public async Task SignInUser(TelegramUser user)
         {
             var existingUser = await GetUser(user.TelegramId);
 
             if (existingUser != null)
             {
-                return existingUser;
+                return;
             }
 
-            return await SignUpUser(user);
+            await SignUpUser(user);
         }
 
-        public async Task<TelegramUser> SignUpUser(TelegramUser user)
+        public async Task SignUpUser(TelegramUser user)
         {
             var existingUser = await GetUser(user.TelegramId);
             var url = "https://ltrbohzosutyfqyyqkfi.supabase.co";
@@ -35,13 +35,13 @@ namespace OMNIX_APP.Services.TelegramAuthService
 
             if (existingUser != null)
             {
-                return existingUser;
+                return;
             }
             else
             {
                var insertedUser = await supabase.From<TelegramUser>().Insert(user);//.ExecuteAsync();
                
-               return insertedUser.Model;//.Data;
+               //return insertedUser.Model;//.Data;
 
             }
 
