@@ -1,4 +1,17 @@
-﻿/* From Uiverse.io by mobinkakei */
+﻿
+.page {
+    position: absolute;
+    top: 0;
+    width: 100vw;
+    margin-left: 0px;
+    margin-right: 0px;
+    left: 0;
+    bottom: 0px;
+    background-color: #000000;
+}
+
+
+/* From Uiverse.io by mobinkakei */
 .loader {
     width: 100px;
     height: 100px;

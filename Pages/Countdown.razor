@@ -1,0 +1,78 @@
+@using System.Timers
+
+<div class="flex flex-col items-center space-y-4">
+    <div class="text-4xl font-bold text-white">
+        @TimeLeft.ToString(@"hh\:mm\:ss")
+    </div>
+    <div class="relative w-64 h-64 sm:w-48 sm:h-48">
+        <svg class="w-full h-full" viewBox="0 0 160 160">
+            <circle
+                cx="80"
+                cy="80"
+                r="70"
+                fill="none"
+                stroke="#ffffff33"
+                stroke-width="8"
+            />
+            <circle
+                cx="80"
+                cy="80"
+                r="70"
+                fill="none"
+                stroke="#3b82f6"
+                stroke-width="8"
+                stroke-linecap="round"
+                stroke-dasharray="@Circumference"
+                stroke-dashoffset="@StrokeDashoffset"
+                transform="rotate(-90 80 80)"
+                class="transition-all duration-1000 ease-linear"
+            />
+            <circle
+                cx="80"
+                cy="80"
+                r="60"
+                fill="#3b82f680"
+                class="transition-all duration-1000 ease-linear"
+                style="clip-path: inset(@(100 - Progress)% 0 0 0);"
+            />
+        </svg>
+        <div 
+            class="absolute inset-0 flex items-center justify-center text-white text-3xl sm:text-2xl font-bold"
+            style="background: linear-gradient(to bottom, #3b82f600 @(100 - Progress)%, #3b82f6 @(100 - Progress)%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"
+        >
+            @Math.Round(Progress)%
+        </div>
+    </div>
+</div>
+
+@code {
+    private TimeSpan TimeLeft = TimeSpan.FromHours(24);
+    private Timer Timer;
+    private const double Circumference = 2 * Math.PI * 70;
+    private double Progress => 100 - (TimeLeft.TotalSeconds / (24 * 60 * 60)) * 100;
+    private double StrokeDashoffset => Circumference - (Progress / 100) * Circumference;
+
+    protected override void OnInitialized()
+    {
+        Timer = new Timer(1000);
+        Timer.Elapsed += CountdownTick;
+        Timer.Start();
+    }
+
+    private void CountdownTick(object sender, ElapsedEventArgs e)
+    {
+        TimeLeft = TimeLeft.Subtract(TimeSpan.FromSeconds(1));
+        if (TimeLeft <= TimeSpan.Zero)
+        {
+            Timer.Stop();
+            TimeLeft = TimeSpan.Zero;
+        }
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        Timer?.Dispose();
+    }
+}
+
