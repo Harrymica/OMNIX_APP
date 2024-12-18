@@ -155,7 +155,7 @@
                     };
                 await lStorage.SetItemAsStringAsync(getId.ToString(), "telegramId");
 
-                if (text.Equals("/start", StringComparison.OrdinalIgnoreCase))
+                /*if (text.Equals("/start", StringComparison.OrdinalIgnoreCase))
                 {
                     // Create an inline keyboard button that redirects to your website
                     var inlineKeyboard = new InlineKeyboardMarkup(new[]
@@ -176,7 +176,7 @@
                         chatId: chatid,
                         text: $"This is what you said: {text}",
                         cancellationToken: token);
-                }
+                }*/
                
                 await telegramServ.SignUpUser(users);
                 StateHasChanged();
