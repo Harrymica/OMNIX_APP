@@ -1,4 +1,4 @@
-﻿@page "/"
+﻿@page "/home"
 @using Telegram.Bot.Types.ReplyMarkups
 @layout LayoutPage 
 @inject ITelegramAuth telegramServ
@@ -10,10 +10,10 @@
 
 
 
-<div class="page min-h-screen bg-gradient-to-br from-purple-600 to-blue-500 flex flex-col items-center justify-center p-0 sm:p-4 overflow-scroll">
+<div class="page min-h-screen bg-gradient-to-br from-purple-600 to-blue-500 flex flex-col items-center justify-center p-0 sm:p-4 ">
     <div class="w-full h-full sm:h-auto sm:max-w-md bg-white bg-opacity-10 backdrop-blur-lg sm:rounded-2xl shadow-lg p-6 space-y-8 flex flex-col justify-between">
         <div>
-            <h1 class="text-3xl font-bold text-center text-white mb-8">Airdrop Telegram App</h1>
+            <h1 class="text-3xl font-bold text-center text-white mb-8">@FullName</h1>
             <Countdown />
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-auto">

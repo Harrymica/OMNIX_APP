@@ -1,10 +1,13 @@
-﻿@page "/progress"
+﻿@page "/"
 @layout LayoutPage
 @using System.Timers
+@using Telegram.Bot.Types.ReplyMarkups
+@inject ITelegramAuth telegramServ
+@inject ILocalStorageService lStorage
 @inject NavigationManager navMag
 
-<div class="min-h-screen bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center p-4">
-    <div class="bg-white rounded-lg shadow-xl p-8 w-full max-w-md fade-in">
+<div class=" min-h-screen bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center p-4">
+    <div class="page bg-white rounded-lg shadow-xl p-8 w-full max-w-md fade-in">
         <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Processing</h2>
         <div class="w-full bg-gray-200 rounded-full h-2.5 mb-6">
             <div class="bg-blue-600 h-2.5 rounded-full transition-all duration-500 ease-out" style="width: @(Progress)%"></div>
@@ -52,15 +55,16 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                         </svg>
                         <span>Process completed successfully!</span>
+                        <div class="align-content-center" style="@BTNClass">
+                            <button class="btn btn-primary" @onclick="GoToHomePage">Proceed</button>
+                        </div>
                     </div>
                 }
             </div>
         }
     </div>
 </div>
-    <div class="align-content-center" style="@BTNClass">
-    <button class="btn btn-primary" @onclick="HomePage">Proceed</button>
-    </div>
+    
 
 @code {
     private List<Step> Steps = new List<Step>
@@ -79,11 +83,105 @@
     private string BTNClass = "display:none";
     private bool display = false;
 
+    private TelegramUser _user = new TelegramUser();
+    private TelegramBotClient _bot = new TelegramBotClient("7324366764:AAE0FiQdBDSnHgZvnv2ZU3f5f9DAiGIMhx8");
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await StartReceivingUpdates();
+
+            //await Task.Delay(2000);
+        }
+    }
+
     protected override async Task OnInitializedAsync()
     {
+        
         _timer = new Timer(1000);
         _timer.Elapsed += TimerElapsed;
         _timer.Start();
+
+    }
+
+
+    private async Task StartReceivingUpdates()
+    {
+        using var cts = new CancellationTokenSource();
+        var receiverOptions = new ReceiverOptions
+            {
+                AllowedUpdates = new UpdateType[]
+                    {
+                UpdateType.Message,
+                UpdateType.EditedMessage,
+                    }
+            };
+
+
+        // Start receiving updates
+        _bot.StartReceiving(UpdataeHandler, ErrorHandler, receiverOptions, cancellationToken: cts.Token);
+    }
+
+    private async Task ErrorHandler(ITelegramBotClient client, Exception exception, CancellationToken token)
+    {
+
+    }
+
+    private async Task UpdataeHandler(ITelegramBotClient client, Update update, CancellationToken token)
+    {
+        if (update.Type == UpdateType.Message)
+        {
+            if (update.Message.Type == MessageType.Text)
+            {
+
+                var text = update.Message.Text;
+                var chatid = update.Message.Chat.Id;
+                var Username = update.Message.From.Username;//Chat.Username;
+                var _firstName = update.Message.From.FirstName;
+                var lastName = update.Message.Chat.LastName;
+                var getId = update.Message.From.Id;
+
+
+                TelegramUser users = new TelegramUser
+                    {
+                        //Id = (long)Guid.NewGuid().GetHashCode(),
+                        TelegramId = getId.ToString(),
+                        Username = Username,
+                        FirstName = _firstName,
+                        LastName = lastName
+                    };
+                await lStorage.SetItemAsStringAsync(getId.ToString(), "telegramId");
+
+                if (text.Equals("/start", StringComparison.OrdinalIgnoreCase))
+                {
+                    // Create an inline keyboard button that redirects to your website
+                    var inlineKeyboard = new InlineKeyboardMarkup(new[]
+                    {
+                    InlineKeyboardButton.WithUrl("Visit Our Website", "https://omnix-app.onrender.com/")
+                });
+
+                    await _bot.SendTextMessageAsync(
+                        chatId: chatid,
+                        text: $"Welcome! Click the button below to start mining, {_firstName}",
+                        replyMarkup: inlineKeyboard,
+                        cancellationToken: token);
+                }
+                else
+                {
+                    // Reply back to the user with their message prefixed
+                    await _bot.SendTextMessageAsync(
+                        chatId: chatid,
+                        text: $"This is what you said: {text}",
+                        cancellationToken: token);
+                }
+               
+                await telegramServ.SignUpUser(users);
+                StateHasChanged();
+
+
+            }
+        }
     }
 
     private void TimerElapsed(object sender, ElapsedEventArgs e)
@@ -108,10 +206,11 @@
         });
     }
 
-    private async Task HomePage()
+    private async Task GoToHomePage()
     {
-        navMag.NavigateTo("/");
+        navMag.NavigateTo("/home");
     }
+
     /*private void TimerElapsed(object sender, ElapsedEventArgs e)
     {
         if (CurrentStep < Steps.Count - 1)

@@ -46,10 +46,10 @@
 </div>
 
 @code {
-    private TimeSpan TimeLeft = TimeSpan.FromHours(24);
+    private TimeSpan TimeLeft = TimeSpan.FromHours(24);//.FromHours(24);
     private Timer Timer;
     private const double Circumference = 2 * Math.PI * 70;
-    private double Progress => 100 - (TimeLeft.TotalSeconds / (24 * 60 * 60)) * 100;
+    private double Progress => 100 - (TimeLeft.TotalSeconds / ( 24 * 60 * 60)) * 100;
     private double StrokeDashoffset => Circumference - (Progress / 100) * Circumference;
 
     protected override void OnInitialized()

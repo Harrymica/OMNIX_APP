@@ -112,7 +112,7 @@ namespace OMNIX_APP
 
                     Console.WriteLine($"{user.userName} | {chatid} | {text}, {user.FirstName}");
                     
-                    await telegramServ.SignUpUser(users);
+                    //await telegramServ.SignUpUser(users);
                    
                    // }
                 }
