@@ -47,9 +47,9 @@ namespace OMNIX_APP
             //over here goes the minimal api
             app.MapPost("/api/bot", async (Update update, ITelegramAuth telegramServ) =>
             {
-                
-                await UpdataeHandler(botClient, update, telegramServ);
-                return Results.Ok(); // Ensure this returns a 200 OK response
+
+                var userInfo = await UpdataeHandler(botClient, update, telegramServ);
+                return Results.Ok(userInfo); // Ensure this returns a 200 OK response
             });
 
             // Define the webhook setting method
@@ -60,9 +60,9 @@ namespace OMNIX_APP
             }
 
             // Define the update handler method
-            async Task UpdataeHandler(TelegramBotClient client, Update update, ITelegramAuth telegramServ)
+            async Task<TelegramUser> UpdataeHandler(TelegramBotClient client, Update update, ITelegramAuth telegramServ)
             {
-                
+                TelegramUser users = new TelegramUser();
                 if (update.Type == UpdateType.Message && update.Message.Type == MessageType.Text)
                 {
                     var text = update.Message.Text;
@@ -75,21 +75,20 @@ namespace OMNIX_APP
                         FirstName = update.Message.Chat.FirstName,
                         LastName = update.Message.Chat.LastName,
                     };
-                   
+
                     //if(user != null)
                     //{
 
-                        TelegramUser users = new TelegramUser
-                        {
-                            //Id = (long)Guid.NewGuid().GetHashCode(),
-                            TelegramId = update.Message.From.Id.ToString(),//getId.ToString(),
-                            Username = user.userName,
-                            FirstName = user.FirstName,
-                            LastName = user.LastName,
-                            DateOfRegistration = DateTime.UtcNow,
+
+                    //Id = (long)Guid.NewGuid().GetHashCode(),
+                    users.TelegramId = update.Message.From.Id.ToString();//getId.ToString(),
+                    users.Username = user.userName;
+                    users.FirstName = user.FirstName;
+                    users.LastName = user.LastName;
+                    users.DateOfRegistration = DateTime.UtcNow;
                         
 
-                        };
+                        
 
                     if (text.Equals("/start", StringComparison.OrdinalIgnoreCase))
                     {
@@ -111,11 +110,11 @@ namespace OMNIX_APP
                     }
 
                     Console.WriteLine($"{user.userName} | {chatid} | {text}, {user.FirstName}");
-                    
                     //await telegramServ.SignUpUser(users);
-                   
-                   // }
+
+                    // }
                 }
+                    return users;
             }
           
 

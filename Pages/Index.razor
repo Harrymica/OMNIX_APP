@@ -106,9 +106,9 @@
         // }
 
         // Simulate receiving an update (you would normally get this from the bot's message handling)
-        //var update = new Update(); 
-        //await HandleUpdateAsync(_bot, update, CancellationToken.None);
-
+        var update = new Update(); 
+        await HandleUpdateAsync(_bot, update, CancellationToken.None);
+       // await GetUserTelegramInfo();
     }
         public async Task<TelegramUser> GetUserTelegramInfo()
         {

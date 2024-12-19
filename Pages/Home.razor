@@ -1,4 +1,5 @@
-﻿@page "/home"
+﻿@page "/"
+@using System.Text
 @using Telegram.Bot.Types.ReplyMarkups
 @layout LayoutPage 
 @inject ITelegramAuth telegramServ
@@ -16,6 +17,15 @@
             <h1 class="text-3xl font-bold text-center text-white mb-8">@FullName</h1>
             <Countdown />
         </div>
+
+        <h3>Check Telegram Bot Updates</h3>
+
+        <button @onclick="CheckForUpdates">Check for Updates</button>
+
+        @if (responseMessage != null)
+        {
+            <p>@responseMessage</p>
+        }
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-auto">
             @* Airdrop Info *@
             <div class=" bg-opacity-20 rounded-lg p-4 text-black h-full" style="background-color:#8990f5">
@@ -35,68 +45,7 @@
     </div>
 </div>
 
-@* <div class="container">
-    <h1 class="title">Phoenix  @_userId</h1>
-    
-    <div class="logo-container">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="phoenix-logo">
-            <path d="M12 2L2 12h3l7-7 7 7h3L12 2z" />
-            <path d="M12 22v-8" />
-            <path d="M12 14l-2.5 2.5" />
-            <path d="M12 14l2.5 2.5" />
-            <path class="animated-path" d="M12 14v4" />
-        </svg>
-    </div>
 
-    <div class="grid">
-        <MiningStatus />
-        <Rewards />
-    </div>
-</div>
- *@
-
-@* 
-<div class="container" style="color:darkslateblue">
-
-    <div class="flex flex-col h-screen bg-background text-foreground" >
-        <main class="flex-1 flex flex-col items-center justify-center gap-8 px-6 py-12" style="color:white">
-            <div class="flex flex-col items-center gap-2">
-                <h1 class="text-3xl font-bold">Airdrop Claim</h1>
-                <p class="text-muted-foreground">Claim your free tokens every 6 hours</p>
-            </div>
-            <div class="bg-card rounded-lg p-6 w-full max-w-md flex flex-col items-center gap-4">
-                <div class="bg-muted rounded-full w-20 h-20 flex items-center justify-center text-4xl">
-                   
-                   
-                    <div class="loader">
-                        
-                        <span>  @_firstName  </span>
-                    </div>
-                  
-                </div>
-                <div class="text-4xl font-bol text-center">
-                    1,235 <span class="text-muted-foreground text-2xl">TOKENS</span>
-                </div>
-
-                <a href="/index">
-
-                    <button type="submit" @onclick="Submit"
-                            style="background-color:#C27406; width:120px  padding: 50px 50px"
-                            class="w-120 h-120 rounded-full inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-primary-foreground h-11 rounded-md px-8 w-full bg-[#111325] hover:bg-[#111325]/90">
-                    The OMNIX 200
-                </button>
-                </a>
-
-               <div class="text-muted-foreground text-sm ">
-                    Next airdrop in <span class="font-medium">@*  @NewTimeLeft.ToString("hh\\:mm\\:ss")  </span>
-                </div>
-            </div>
-           
-           
-        </main>
-       
-    </div>
-</div> *@
 @* <img src="/images/dakcoin.jpg" /> *@
 
 
@@ -114,6 +63,48 @@
     private TelegramUser _user = new TelegramUser();
     private TelegramBotClient _bot = new TelegramBotClient("7324366764:AAE0FiQdBDSnHgZvnv2ZU3f5f9DAiGIMhx8");
 
+
+    private string responseMessage;
+
+    private async Task CheckForUpdates()
+    {
+        // Create a JSON object with the string you want to send
+        var jsonContent = new StringContent("{\"command\":\"/start\"}", Encoding.UTF8, "application/json");
+        try
+        {
+            var response = await http.PostAsync("https://omnix-app.onrender.com/api/bot", jsonContent); // Send an empty JSON object or relevant data
+            if (response.IsSuccessStatusCode)
+            {
+                // Deserialize the response into an object
+                var userInfo = await response.Content.ReadFromJsonAsync<TelegramUser>();
+
+                // Create a new TelegramUser instance from the response
+                var telegramUser = new TelegramUser
+                    {
+                        FirstName = userInfo.FirstName,
+                        LastName = userInfo.LastName,
+                        TelegramId = userInfo.TelegramId,
+                        DateOfRegistration = DateTime.UtcNow // Set registration date as needed
+                    };
+
+                // Call SignUpUser with the new TelegramUser instance
+                await telegramServ.SignInUser(telegramUser);
+                responseMessage = "Checked for updates successfully!";
+               
+                //responseMessage = response.Content;
+            }
+            else
+            {
+               // responseMessage = "Failed to check for updates.";
+                responseMessage = $"Failed to check for updates. Status Code: {response.StatusCode}, Reason: {response.ReasonPhrase}";
+                Console.WriteLine($"Error: {response.StatusCode} - {response.ReasonPhrase}");
+            }
+        }
+        catch (Exception ex)
+        {
+            responseMessage = $"Error: {ex.Message}";
+        }
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -160,6 +151,7 @@
                         }
             };*/
         //await StartReceivingUpdates();
+        await CheckForUpdates();
     }
 
     private async Task StartReceivingUpdates()
