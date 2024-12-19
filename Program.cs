@@ -48,8 +48,9 @@ namespace OMNIX_APP
             app.MapPost("/api/bot", async (Update update, ITelegramAuth telegramServ) =>
             {
 
-                var userInfo = await UpdataeHandler(botClient, update, telegramServ);
-                return Results.Ok(userInfo); // Ensure this returns a 200 OK response
+                /*var userInfo =*/ await UpdataeHandler(botClient, update, telegramServ);
+                //return Results.Ok(userInfo); // Ensure this returns a 200 OK response
+                return Results.Ok();
             });
 
             // Define the webhook setting method
@@ -60,7 +61,7 @@ namespace OMNIX_APP
             }
 
             // Define the update handler method
-            async Task<TelegramUser> UpdataeHandler(TelegramBotClient client, Update update, ITelegramAuth telegramServ)
+            async Task/*<TelegramUser>*/ UpdataeHandler(TelegramBotClient client, Update update, ITelegramAuth telegramServ)
             {
                 TelegramUser users = new TelegramUser();
                 if (update.Type == UpdateType.Message && update.Message.Type == MessageType.Text)
@@ -114,7 +115,7 @@ namespace OMNIX_APP
 
                     // }
                 }
-                    return users;
+                    //return users;
             }
           
 
