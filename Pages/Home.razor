@@ -96,7 +96,7 @@
             else
             {
                // responseMessage = "Failed to check for updates.";
-                responseMessage = $"Failed to check for updates. Status Code: {response.StatusCode}, Reason: {response.ReasonPhrase}";
+                responseMessage = $"Failed to check for updates. Status Code: {response.StatusCode}, Reason: {response.ReasonPhrase}, Message: {response.RequestMessage}";
                 Console.WriteLine($"Error: {response.StatusCode} - {response.ReasonPhrase}");
             }
         }
